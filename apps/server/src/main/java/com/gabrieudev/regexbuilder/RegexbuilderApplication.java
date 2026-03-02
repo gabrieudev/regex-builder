@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.gabrieudev.regexbuilder.infrastructure.config.AppProperties;
 
-@SpringBootApplication(scanBasePackages = "com.gabrieudev.formio")
+@SpringBootApplication(scanBasePackages = "com.gabrieudev.regexbuilder")
 @ConfigurationPropertiesScan("com.gabrieudev.regexbuilder.infrastructure.config")
 @EnableJpaRepositories(basePackages = "com.gabrieudev.regexbuilder.infrastructure.persistence.repository")
 @EntityScan(basePackages = "com.gabrieudev.regexbuilder.infrastructure.persistence.entity")

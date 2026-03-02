@@ -29,13 +29,13 @@ public class SwaggerConfig {
                 .components(new Components()
                         .addSecuritySchemes(BEARER_SCHEME_NAME, bearerScheme))
                 .addSecurityItem(new SecurityRequirement().addList(BEARER_SCHEME_NAME))
-                .info(new Info().title("Formio API")
+                .info(new Info().title("Regex Builder API")
                         .description(
-                                "API da aplicação Formio para gerenciamento de times, membros, formulários e respostas")
+                                "API da aplicação Regex Builder para gerenciamento de expressões regulares")
                         .version("v0.0.1")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Repositório do projeto")
-                        .url("https://github.com/gabrieudev/formio"));
+                        .url("https://github.com/gabrieudev/regex-builder"));
     }
 }

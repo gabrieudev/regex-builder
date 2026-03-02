@@ -1,9 +1,8 @@
 package com.gabrieudev.regexbuilder.infrastructure.persistence.entity;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.gabrieudev.regexbuilder.domain.enums.AuthProvider;
+import com.gabrieudev.regexbuilder.domain.enums.RegexLanguage;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +11,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,38 +20,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(name = "regexes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity {
-
+public class RegexEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false, length = 1000)
+    private String pattern;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    private String imageUrl;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private Boolean emailVerified = false;
-
-    private String password;
+    private String description;
 
     @Enumerated(EnumType.STRING)
-    private AuthProvider provider;
+    @Column(nullable = false)
+    private RegexLanguage language;
 
-    private String providerId;
-
-    @Column(length = 36)
-    private String emailVerificationToken;
-
-    private LocalDateTime emailVerificationTokenExpiry;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 }

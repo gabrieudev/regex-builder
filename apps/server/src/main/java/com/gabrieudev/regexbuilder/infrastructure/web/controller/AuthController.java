@@ -22,11 +22,14 @@ import com.gabrieudev.regexbuilder.application.usecase.auth.ResendVerificationEm
 import com.gabrieudev.regexbuilder.application.usecase.auth.SignUpUseCase;
 import com.gabrieudev.regexbuilder.application.usecase.auth.VerifyEmailUseCase;
 import com.gabrieudev.regexbuilder.domain.model.User;
+import com.gabrieudev.regexbuilder.infrastructure.security.CurrentUser;
 import com.gabrieudev.regexbuilder.infrastructure.security.TokenProvider;
+import com.gabrieudev.regexbuilder.infrastructure.security.UserPrincipal;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -116,15 +119,15 @@ public class AuthController {
                 "{\"success\":true,\"message\":\"Email verificado com sucesso.\"}");
     }
 
-    @Operation(summary = "Reenviar email de verificação", description = "Reenvia o email de verificação para o usuário")
+    @Operation(summary = "Reenviar email de verificação", description = "Reenvia o email de verificação para o usuário", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Email de verificação reenviado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
     @PostMapping("/resend-verification-email")
-    public ResponseEntity<Void> resendVerificationEmail(@RequestParam String email) {
-        resendVerificationEmailUseCase.execute(email);
+    public ResponseEntity<Void> resendVerificationEmail(@CurrentUser UserPrincipal userPrincipal) {
+        resendVerificationEmailUseCase.execute(userPrincipal.getEmail());
         return ResponseEntity.ok().build();
     }
 }

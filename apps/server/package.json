@@ -1,0 +1,11 @@
+{
+  "name": "server",
+  "scripts": {
+    "dev": "cross-env ./mvnw spring-boot:run",
+    "build": "cross-env ./mvnw clean install -DskipTests",
+    "start": "java -jar target/*.jar"
+  },
+  "dependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegexRequest {
+public class ExecuteRegexRequest {
     @NotNull(message = "O campo 'pattern' é obrigatório")
     @NotBlank(message = "O campo 'pattern' não pode ser vazio")
     @Length(max = 1000, message = "O campo 'pattern' deve ter no máximo 1000 caracteres")
@@ -21,7 +21,7 @@ public class RegexRequest {
 
     @NotNull(message = "O campo 'testString' é obrigatório")
     @NotBlank(message = "O campo 'testString' não pode ser vazio")
-    @Length(max = 1000000, message = "O campo 'testString' deve ter no máximo 1000000 caracteres")
+    @Length(max = 1000, message = "O campo 'testString' deve ter no máximo 1000 caracteres")
     private String testString;
 
     @NotNull(message = "O campo 'language' é obrigatório")

@@ -2,8 +2,9 @@ package com.gabrieudev.regexbuilder.infrastructure.executor;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gabrieudev.regexbuilder.application.dto.regex.RegexRequest;
-import com.gabrieudev.regexbuilder.application.dto.regex.RegexResponse;
+import com.gabrieudev.regexbuilder.application.dto.regex.ExecuteRegexRequest;
+import com.gabrieudev.regexbuilder.application.dto.regex.ExecuteRegexResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +23,9 @@ public abstract class AbstractExternalProcessExecutor implements RegexExecutorSt
     protected static final long TIMEOUT_SECONDS = 3;
 
     @Override
-    public RegexResponse execute(RegexRequest request) {
+    public ExecuteRegexResponse execute(ExecuteRegexRequest request) {
         long startTime = System.currentTimeMillis();
-        RegexResponse response = createEmptyResponse();
+        ExecuteRegexResponse response = createEmptyResponse();
 
         final AtomicReference<Process> processRef = new AtomicReference<>();
         Path tempDir = null;
@@ -86,7 +87,7 @@ public abstract class AbstractExternalProcessExecutor implements RegexExecutorSt
         return response;
     }
 
-    protected abstract ProcessBuilder buildProcess(RegexRequest request, Path workingDir) throws IOException;
+    protected abstract ProcessBuilder buildProcess(ExecuteRegexRequest request, Path workingDir) throws IOException;
 
     protected Path createTempScript(String resourcePath, String scriptName, Path workingDir) throws IOException {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
@@ -101,8 +102,8 @@ public abstract class AbstractExternalProcessExecutor implements RegexExecutorSt
         }
     }
 
-    private RegexResponse createEmptyResponse() {
-        RegexResponse response = new RegexResponse();
+    private ExecuteRegexResponse createEmptyResponse() {
+        ExecuteRegexResponse response = new ExecuteRegexResponse();
         response.setSuccess(false);
         response.setMatches(new ArrayList<>());
         response.setMatchRanges(new ArrayList<>());
@@ -112,7 +113,7 @@ public abstract class AbstractExternalProcessExecutor implements RegexExecutorSt
         return response;
     }
 
-    private void parseOutput(String outputStr, RegexResponse response, long startTime) {
+    private void parseOutput(String outputStr, ExecuteRegexResponse response, long startTime) {
         try {
             Map<String, Object> result = objectMapper.readValue(outputStr,
                     new TypeReference<Map<String, Object>>() {

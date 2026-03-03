@@ -2,8 +2,9 @@ package com.gabrieudev.regexbuilder.infrastructure.executor;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gabrieudev.regexbuilder.application.dto.regex.RegexRequest;
-import com.gabrieudev.regexbuilder.application.dto.regex.RegexResponse;
+import com.gabrieudev.regexbuilder.application.dto.regex.ExecuteRegexRequest;
+import com.gabrieudev.regexbuilder.application.dto.regex.ExecuteRegexResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ public class JavaRegexExecutor implements RegexExecutorStrategy {
     private static final long JAVA_REGEX_TIMEOUT_MS = 2000;
 
     @Override
-    public RegexResponse execute(RegexRequest request) {
+    public ExecuteRegexResponse execute(ExecuteRegexRequest request) {
         long startNano = System.nanoTime();
         Map<String, Object> detailed = new HashMap<>();
         detailed.put("engine", "java");
@@ -129,8 +130,8 @@ public class JavaRegexExecutor implements RegexExecutorStrategy {
         return buildResponse(detailed);
     }
 
-    private RegexResponse buildResponse(Map<String, Object> detailed) {
-        RegexResponse resp = new RegexResponse();
+    private ExecuteRegexResponse buildResponse(Map<String, Object> detailed) {
+        ExecuteRegexResponse resp = new ExecuteRegexResponse();
         resp.setSuccess(asBoolean(detailed.get("success"), false));
         resp.setMatches(asList(detailed.get("matches")));
         resp.setError(detailed.containsKey("error") ? detailed.get("error").toString() : null);

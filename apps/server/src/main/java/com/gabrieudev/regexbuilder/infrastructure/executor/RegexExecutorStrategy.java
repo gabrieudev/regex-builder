@@ -1,8 +1,8 @@
 package com.gabrieudev.regexbuilder.infrastructure.executor;
 
-import com.gabrieudev.regexbuilder.application.dto.regex.RegexRequest;
-import com.gabrieudev.regexbuilder.application.dto.regex.RegexResponse;
+import com.gabrieudev.regexbuilder.application.dto.regex.ExecuteRegexRequest;
+import com.gabrieudev.regexbuilder.application.dto.regex.ExecuteRegexResponse;
 
 public interface RegexExecutorStrategy {
-    RegexResponse execute(RegexRequest request);
+    ExecuteRegexResponse execute(ExecuteRegexRequest request);
 }

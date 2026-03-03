@@ -7,8 +7,9 @@ import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
-  title: "Rateio",
-  description: "Rateio",
+  title: "Regex Builder",
+  description:
+    "Construa, teste e gerencie expressões regulares com facilidade.",
 };
 
 const inter = Inter({ subsets: ["latin"] });

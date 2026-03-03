@@ -25,7 +25,7 @@ export default function SignupPage() {
   return (
     <AuthLayout
       title="Criar uma conta"
-      subtitle="Cadastre-se gratuitamente e comece a organizar suas despesas"
+      subtitle="Cadastre-se gratuitamente e comece a organizar suas expressões regulares"
     >
       {!verificationData ? (
         <div className="space-y-4">

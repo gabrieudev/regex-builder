@@ -18,13 +18,26 @@ import { toast } from "sonner";
 import axiosInstance from "@/lib/axios";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Info } from "lucide-react";
+import { PasswordStrengthIndicator } from "./password-strength-indicator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-const formSchema = z.object({
-  name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
-  email: z.email("Email inválido"),
-  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-});
+const formSchema = z
+  .object({
+    name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+    email: z.email("Email inválido"),
+    password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+    confirmPassword: z.string().min(6, "Confirme sua senha"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
 
 interface SignupFormProps {
   onSuccess: (name: string, email: string, token: string) => void;
@@ -34,17 +47,24 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function SignupForm({ onSuccess }: SignupFormProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", email: "", password: "" },
+    defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
   });
+
+  const password = form.watch("password");
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true);
     try {
-      const resp = await axiosInstance.post("/auth/signup", data);
+      const resp = await axiosInstance.post("/auth/signup", {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
       toast.success("Conta criada! Por favor, verifique seu email.");
       onSuccess(data.name, data.email, resp.data.emailVerificationToken);
     } catch (error: unknown) {
@@ -62,26 +82,26 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
     }
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+  const toggleConfirmVisibility = () => setShowConfirmPassword((prev) => !prev);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome</FormLabel>
+              <FormLabel>Nome completo</FormLabel>
               <FormControl>
-                <Input placeholder="Nome" autoComplete="name" {...field} />
+                <Input placeholder="Seu nome" autoComplete="name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="email"
@@ -100,12 +120,29 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Senha</FormLabel>
+              <FormLabel className="flex items-center gap-1">
+                Senha
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-xs">
+                      <p>
+                        A senha deve conter pelo menos 6 caracteres. Para uma
+                        senha forte, use maiúsculas, minúsculas, números e
+                        caracteres especiais.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
@@ -132,9 +169,47 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
                 </div>
               </FormControl>
               <FormMessage />
+              {password && <PasswordStrengthIndicator password={password} />}
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirmar senha</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input
+                    placeholder="••••••"
+                    type={showConfirmPassword ? "text" : "password"}
+                    autoComplete="off"
+                    className="pr-10"
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    onClick={toggleConfirmVisibility}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label={
+                      showConfirmPassword ? "Esconder senha" : "Mostrar senha"
+                    }
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
           <Button
             disabled={loading}

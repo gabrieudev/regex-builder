@@ -70,8 +70,8 @@ export default function NotFound() {
               transition={{ delay: 0.5, duration: 0.4 }}
               className="mb-6 text-muted-foreground"
             >
-              Parece que esta página não existe. Que tal voltar para a
-              página inicial e tentar novamente?
+              Parece que esta página não existe. Que tal voltar para a página
+              inicial e tentar novamente?
             </motion.p>
 
             <motion.div
@@ -80,7 +80,7 @@ export default function NotFound() {
               transition={{ delay: 0.6, duration: 0.3 }}
             >
               <Button asChild size="lg" className="gap-2">
-                <Link href="/">
+                <Link href="/dashboard">
                   <Home className="h-4 w-4" />
                   Voltar para o início
                 </Link>

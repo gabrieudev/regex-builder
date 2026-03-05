@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import axiosInstance from "@/lib/axios";
+import axiosInstance from "@/lib/api";
 import axios from "axios";
 import { useAuth } from "@/providers/auth-context";
 import { motion } from "framer-motion";

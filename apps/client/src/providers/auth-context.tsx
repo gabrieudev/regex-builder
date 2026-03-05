@@ -1,6 +1,6 @@
 "use client";
 
-import axiosInstance from "@/lib/axios";
+import axiosInstance from "@/lib/api";
 import {
   createContext,
   ReactNode,

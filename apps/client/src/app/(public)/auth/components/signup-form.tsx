@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import axiosInstance from "@/lib/axios";
+import axiosInstance from "@/lib/api";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Info } from "lucide-react";

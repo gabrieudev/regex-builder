@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { TriangleAlert } from "lucide-react";
+import { TriangleAlert, X } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface Props {
   result: ExecutionResult | null;
@@ -35,7 +36,9 @@ export function ResultsPanel({ result, error, isLoading }: Props) {
         className="rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/20 p-4"
       >
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-red-600 dark:text-red-400 text-sm">✕</span>
+          <span className="text-red-600 dark:text-red-400 text-sm">
+            <X className="h-4 w-4" />
+          </span>
           <span className="text-xs font-mono font-bold text-red-600 dark:text-red-400">
             Erro
           </span>
@@ -211,15 +214,15 @@ function ResultSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden">
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+    <Card className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+      <CardHeader className="flex flex-row items-center gap-2 px-4 py-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
         <span
           className="w-1.5 h-1.5 rounded-full"
           style={{ background: color, boxShadow: `0 0 4px ${color}` }}
         />
-        <span className="text-xs font-mono text-gray-500 dark:text-gray-400">
+        <CardTitle className="text-xs font-mono text-gray-500 dark:text-gray-400">
           {title}
-        </span>
+        </CardTitle>
         {count !== undefined && (
           <span
             className="ml-auto text-[10px] font-mono font-bold"
@@ -228,8 +231,10 @@ function ResultSection({
             {count}
           </span>
         )}
-      </div>
-      <div className="px-4 py-3 flex flex-col gap-2">{children}</div>
-    </div>
+      </CardHeader>
+      <CardContent className="px-4 py-3 flex flex-col gap-2">
+        {children}
+      </CardContent>
+    </Card>
   );
 }

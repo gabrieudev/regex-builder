@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   pattern: string;
@@ -39,23 +40,26 @@ export function RegexPreview({ pattern, language, codeSnippet }: Props) {
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setShowCode((v) => !v)}
-            className="text-[10px] font-mono px-2 py-0.5 rounded border transition-colors cursor-pointer"
-            style={{
-              borderColor: showCode ? "#22d3ee44" : "#d1d5db",
-              color: showCode ? "#22d3ee" : "#6b7280",
-              background: showCode ? "#22d3ee10" : "transparent",
-            }}
+            className={`text-[10px] font-mono px-2 py-0.5 h-auto border transition-colors ${
+              showCode
+                ? "border-cyan-500/30 text-cyan-600 bg-cyan-500/10"
+                : "border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400"
+            }`}
           >
             {showCode ? "padrão" : "código"}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => copy(showCode ? codeSnippet : pattern)}
-            className="text-[10px] font-mono px-2 py-0.5 rounded border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-500/30 transition-colors cursor-pointer"
+            className="text-[10px] font-mono px-2 py-0.5 h-auto border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-500/30"
           >
             {copied ? "copiado!" : "copiar"}
-          </button>
+          </Button>
         </div>
       </div>
 

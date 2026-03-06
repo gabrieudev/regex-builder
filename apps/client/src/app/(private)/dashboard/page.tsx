@@ -13,6 +13,8 @@ import { ResultsPanel } from "./components/results-panel";
 import { SaveDialog } from "./components/save-dialog";
 import { TestPanel } from "./components/test-panel";
 import { useDashboard } from "./use-dashboard";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Dashboard() {
   const dash = useDashboard();
@@ -63,15 +65,17 @@ export default function Dashboard() {
             language={dash.language}
             onChange={dash.setLanguage}
           />
-          <button
+          <Button
+            size="sm"
             onClick={() => dash.setShowSaveDialog(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 text-xs font-mono text-gray-600 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-500/30 transition-colors cursor-pointer"
+            variant="outline"
+            className="flex items-center gap-1.5 px-3 py-1.5 cursor-pointer"
           >
             <span>
               <Download className="h-4 w-4" />
             </span>
-            salvar
-          </button>
+            Salvar
+          </Button>
         </div>
       </motion.header>
 
@@ -278,55 +282,62 @@ function QuickReference({ language }: { language: string }) {
   return (
     <div className="p-3 flex flex-col gap-4">
       {tips.map((section) => (
-        <div key={section.title}>
-          <p
-            className="text-[9px] font-mono uppercase tracking-widest mb-2"
-            style={{ color: section.color }}
-          >
-            {section.title}
-          </p>
-          <div className="flex flex-col gap-1">
-            {section.items.map((item) => (
-              <div
-                key={item.label}
-                className="flex items-center justify-between gap-2 py-1"
-              >
-                <span
-                  className="text-[10px] font-mono font-bold"
-                  style={{ color: section.color }}
+        <Card
+          key={section.title}
+          className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950"
+        >
+          <CardContent className="p-3">
+            <p
+              className="text-[9px] font-mono uppercase tracking-widest mb-2"
+              style={{ color: section.color }}
+            >
+              {section.title}
+            </p>
+            <div className="flex flex-col gap-1">
+              {section.items.map((item) => (
+                <div
+                  key={item.label}
+                  className="flex items-center justify-between gap-2 py-1"
                 >
-                  {item.label}
-                </span>
-                <span className="text-[10px] text-gray-500 dark:text-gray-400 text-right leading-tight">
-                  {item.pattern}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+                  <span
+                    className="text-[10px] font-mono font-bold"
+                    style={{ color: section.color }}
+                  >
+                    {item.label}
+                  </span>
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400 text-right leading-tight">
+                    {item.pattern}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       ))}
 
-      <div>
-        <p className="text-[9px] font-mono uppercase tracking-widest mb-2 text-amber-600 dark:text-amber-400">
-          Dicas
-        </p>
-        <div className="flex flex-col gap-2">
-          {[
-            "Arraste elementos da paleta para o canvas",
-            "Clique ✕ em qualquer elemento para removê-lo",
-            "Edite elementos configuráveis diretamente",
-            "Elementos podem ser reordenados arrastando",
-            "Use o modo texto para digitar regex manualmente",
-          ].map((tip, i) => (
-            <p
-              key={i}
-              className="text-[10px] text-gray-500 dark:text-gray-400 leading-relaxed"
-            >
-              {tip}
-            </p>
-          ))}
-        </div>
-      </div>
+      <Card className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+        <CardContent className="p-3">
+          <p className="text-[9px] font-mono uppercase tracking-widest mb-2 text-amber-600 dark:text-amber-400">
+            Dicas
+          </p>
+          <div className="flex flex-col gap-2">
+            {[
+              "Arraste elementos da paleta para o canvas",
+              "Clique ✕ em qualquer elemento para removê-lo",
+              "Edite elementos configuráveis diretamente",
+              "Elementos podem ser reordenados arrastando",
+              "Use o modo texto para digitar regex manualmente",
+            ].map((tip, i) => (
+              <p
+                key={i}
+                className="text-[10px] text-gray-500 dark:text-gray-400 leading-relaxed"
+              >
+                {tip}
+              </p>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

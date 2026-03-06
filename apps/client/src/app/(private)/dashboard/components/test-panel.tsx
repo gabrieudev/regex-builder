@@ -2,7 +2,9 @@
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Play } from "lucide-react";
+import { Loader2, Play } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   testString: string;
@@ -70,36 +72,17 @@ export function TestPanel({
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Área de entrada */}
-      <div className="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden bg-white dark:bg-gray-950">
-        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
-            <span className="text-xs font-mono text-gray-500 dark:text-gray-400">
-              string de teste
-            </span>
-          </div>
-          <span className="text-[10px] font-mono text-gray-400 dark:text-gray-600">
-            {testString.length} caracteres
-          </span>
-        </div>
-        <textarea
-          value={testString}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full bg-transparent px-4 py-3 font-mono text-xs text-gray-800 dark:text-gray-200 resize-none outline-none placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed"
-          rows={4}
-          placeholder="Digite a string de teste aqui..."
-          spellCheck={false}
-        />
-      </div>
+      <Textarea
+        value={testString}
+        onChange={(e) => onChange(e.target.value)}
+        className="min-h-25 font-mono text-xs resize-none"
+        placeholder="Digite a string de teste aqui..."
+      />
 
-      {/* Botão executar */}
-      <motion.button
+      <Button
         onClick={onExecute}
         disabled={!pattern || isLoading}
-        whileHover={pattern && !isLoading ? { scale: 1.01 } : {}}
-        whileTap={pattern && !isLoading ? { scale: 0.98 } : {}}
-        className="relative w-full py-2.5 rounded-xl font-mono text-sm font-bold transition-all duration-200 overflow-hidden disabled:opacity-40 disabled:cursor-not-allowed bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 cursor-pointer"
+        className="relative w-full py-2.5 font-mono text-sm font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         style={{
           background:
             !pattern || isLoading
@@ -113,19 +96,17 @@ export function TestPanel({
         }}
       >
         {isLoading ? (
-          <span className="flex items-center justify-center gap-2">
-            <Spinner />
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             executando...
-          </span>
+          </>
         ) : (
-          <span className="flex items-center justify-center gap-2">
-            <span>
-              <Play className="w-4 h-4" />
-            </span>
+          <>
+            <Play className="mr-2 h-4 w-4" />
             executar regex
-          </span>
+          </>
         )}
-      </motion.button>
+      </Button>
 
       {/* Resultado destacado */}
       {hasResult && isSuccess && segments && (
@@ -166,15 +147,5 @@ export function TestPanel({
         </motion.div>
       )}
     </div>
-  );
-}
-
-function Spinner() {
-  return (
-    <motion.span
-      animate={{ rotate: 360 }}
-      transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-      className="inline-block w-3 h-3 border border-current border-t-transparent rounded-full"
-    />
   );
 }

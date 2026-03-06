@@ -1,7 +1,12 @@
 "use client";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {
   elements: RegexElement[];
@@ -222,7 +227,6 @@ function CanvasElement({
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent) => void;
 }) {
-  const [showTooltip, setShowTooltip] = useState(false);
   const [editing, setEditing] = useState(false);
 
   const handleDragStart = (e: React.DragEvent) => {
@@ -234,89 +238,79 @@ function CanvasElement({
   };
 
   return (
-    <div className="relative group">
-      <div
-        draggable={!editing}
-        onDragStart={handleDragStart}
-        onDragEnd={onDragEnd}
-        onDragOver={onDragOver}
-        onDrop={onDrop}
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-        className="relative flex items-center rounded-lg border font-mono text-sm font-bold select-none cursor-grab active:cursor-grabbing"
-        style={{
-          color: element.color,
-          background: `${element.color}15`,
-          borderColor: `${element.color}40`,
-          boxShadow: `0 0 8px ${element.color}15, inset 0 1px 0 ${element.color}20`,
-          padding: element.configurable ? "4px 8px" : "6px 10px",
-        }}
-      >
-        {element.configurable ? (
-          <div className="flex items-center gap-1">
-            <span className="text-xs opacity-60">
-              {element.label.replace("…", "")}
-            </span>
-            <input
-              value={element.input ?? ""}
-              onChange={(e) => onUpdateInput(e.target.value)}
-              onFocus={() => setEditing(true)}
-              onBlur={() => setEditing(false)}
-              onClick={(e) => e.stopPropagation()}
-              placeholder={element.placeholder}
-              className="bg-transparent outline-none w-16 text-xs font-mono placeholder-opacity-30 border-b border-dashed"
-              style={{
-                color: element.color,
-                borderColor: `${element.color}50`,
-                minWidth: "40px",
-                maxWidth: "80px",
-              }}
-              size={Math.max((element.input ?? "").length, 4)}
-            />
-            {element.type === "group" && (
-              <span className="text-xs opacity-60">)</span>
-            )}
-          </div>
-        ) : (
-          <span>{element.label}</span>
-        )}
-
-        {/* Botão remover */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onRemove();
+    <Tooltip delayDuration={200}>
+      <TooltipTrigger asChild>
+        <div
+          draggable={!editing}
+          onDragStart={handleDragStart}
+          onDragEnd={onDragEnd}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
+          className="relative flex items-center rounded-lg border font-mono text-sm font-bold select-none cursor-grab active:cursor-grabbing group"
+          style={{
+            color: element.color,
+            background: `${element.color}15`,
+            borderColor: `${element.color}40`,
+            boxShadow: `0 0 8px ${element.color}15, inset 0 1px 0 ${element.color}20`,
+            padding: element.configurable ? "4px 8px" : "6px 10px",
           }}
-          className="ml-1.5 w-4 h-4 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[10px] hover:bg-red-500 hover:text-white"
-          style={{ color: element.color }}
         >
-          ✕
-        </button>
-      </div>
-
-      {/* Tooltip */}
-      <AnimatePresence>
-        {showTooltip && (
-          <motion.div
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4 }}
-            transition={{ duration: 0.1 }}
-            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none"
-          >
-            <div
-              className="px-2 py-1 rounded text-[10px] whitespace-nowrap border shadow-xl"
-              style={{
-                background: "#0d0d18",
-                borderColor: `${element.color}40`,
-                color: "#8888aa",
-              }}
-            >
-              {element.description}
+          {element.configurable ? (
+            <div className="flex items-center gap-1">
+              <span className="text-xs opacity-60">
+                {element.label.replace("…", "")}
+              </span>
+              <input
+                value={element.input ?? ""}
+                onChange={(e) => onUpdateInput(e.target.value)}
+                onFocus={() => setEditing(true)}
+                onBlur={() => setEditing(false)}
+                onClick={(e) => e.stopPropagation()}
+                placeholder={element.placeholder}
+                className="bg-transparent outline-none w-16 text-xs font-mono placeholder-opacity-30 border-b border-dashed"
+                style={{
+                  color: element.color,
+                  borderColor: `${element.color}50`,
+                  minWidth: "40px",
+                  maxWidth: "80px",
+                }}
+                size={Math.max((element.input ?? "").length, 4)}
+              />
+              {element.type === "group" && (
+                <span className="text-xs opacity-60">)</span>
+              )}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+          ) : (
+            <span>{element.label}</span>
+          )}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove();
+            }}
+            className="ml-1.5 w-4 h-4 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[10px] hover:bg-red-500 hover:text-white"
+            style={{ color: element.color }}
+          >
+            ✕
+          </button>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent
+        side="bottom"
+        align="center"
+        className="p-0 border-none bg-transparent shadow-none"
+      >
+        <div
+          className="px-2 py-1 rounded text-[10px] whitespace-nowrap border shadow-xl"
+          style={{
+            background: "#0d0d18",
+            borderColor: `${element.color}40`,
+            color: "#8888aa",
+          }}
+        >
+          {element.description}
+        </div>
+      </TooltipContent>
+    </Tooltip>
   );
 }

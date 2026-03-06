@@ -36,4 +36,59 @@ declare global {
     emailVerificationToken?: string;
     emailVerificationTokenExpiry?: string;
   }
+
+  export type Language = "JAVA" | "PYTHON" | "JAVASCRIPT";
+  export type Mode = "visual" | "text";
+
+  export type ElementCategory =
+    | "literal"
+    | "charClass"
+    | "quantifier"
+    | "anchor"
+    | "group"
+    | "lookaround";
+
+  export interface RegexElement {
+    id: string;
+    type: string;
+    category: ElementCategory;
+    label: string;
+    value: string;
+    color: string;
+    description: string;
+    input?: string;
+    configurable?: boolean;
+    placeholder?: string;
+  }
+
+  export interface ExecutionResult {
+    success: boolean;
+    matches: string[];
+    error: string;
+    executionTimeMs: number;
+    matchCount: number;
+    matchRanges: Array<Record<string, number>>;
+    groups: string[][];
+    namedGroups: Record<string, string[]>;
+    isFullMatch: boolean;
+    warnings: string[];
+    meta: Record<string, unknown>;
+  }
+
+  export interface SaveRegex {
+    name: string;
+    pattern: string;
+    language: Language;
+    elements: RegexElement[];
+  }
+
+  export interface Regex {
+    id: string;
+    name: string;
+    pattern: string;
+    language: Language;
+    elements: RegexElement[];
+    createdAt: string;
+    createdBy: User;
+  }
 }

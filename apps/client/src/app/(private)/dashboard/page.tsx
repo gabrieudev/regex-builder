@@ -12,7 +12,7 @@ import { RegexPreview } from "./components/regex-preview";
 import { ResultsPanel } from "./components/results-panel";
 import { SaveDialog } from "./components/save-dialog";
 import { TestPanel } from "./components/test-panel";
-import { RegexElement, useDashboard } from "./use-dashboard";
+import { useDashboard } from "./use-dashboard";
 
 export default function Dashboard() {
   const dash = useDashboard();
@@ -223,8 +223,7 @@ export default function Dashboard() {
         pattern={dash.pattern}
         onSave={dash.saveRegex}
         onClose={() => dash.setShowSaveDialog(false)}
-        savedRegexes={dash.savedRegexes}
-        onLoad={dash.loadRegex}
+        loading={dash.saveRegexMutation.isPending}
       />
     </div>
   );

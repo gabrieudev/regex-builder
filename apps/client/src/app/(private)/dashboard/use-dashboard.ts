@@ -3,53 +3,7 @@
 import axiosInstance from "@/lib/api";
 import { useMutation } from "@tanstack/react-query";
 import { useState, useCallback, useMemo } from "react";
-
-export type Language = "JAVA" | "PYTHON" | "JAVASCRIPT";
-export type Mode = "visual" | "text";
-
-export type ElementCategory =
-  | "literal"
-  | "charClass"
-  | "quantifier"
-  | "anchor"
-  | "group"
-  | "lookaround";
-
-export interface RegexElement {
-  id: string;
-  type: string;
-  category: ElementCategory;
-  label: string;
-  value: string;
-  color: string;
-  description: string;
-  input?: string;
-  configurable?: boolean;
-  placeholder?: string;
-}
-
-export interface ExecutionResult {
-  success: boolean;
-  matches: string[];
-  error: string;
-  executionTimeMs: number;
-  matchCount: number;
-  matchRanges: Array<Record<string, number>>;
-  groups: string[][];
-  namedGroups: Record<string, string[]>;
-  isFullMatch: boolean;
-  warnings: string[];
-  meta: Record<string, unknown>;
-}
-
-export interface SavedRegex {
-  id: string;
-  name: string;
-  pattern: string;
-  language: Language;
-  elements: RegexElement[];
-  createdAt: string;
-}
+import { toast } from "sonner";
 
 const ELEMENT_PALETTE: RegexElement[] = [
   // Literais
@@ -389,7 +343,6 @@ export function useDashboard() {
   const [testString, setTestString] = useState<string>(
     "Olá Mundo! Teste 123 abc@exemplo.com",
   );
-  const [savedRegexes, setSavedRegexes] = useState<SavedRegex[]>([]);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [mode, setMode] = useState<Mode>("visual");
@@ -477,49 +430,54 @@ export function useDashboard() {
     executeRegexMutation.reset();
   }, [executeRegexMutation]);
 
-  const saveRegex = useCallback(
-    (name: string) => {
-      let elementsToSave = canvasElements;
-      if (mode === "text" && manualPattern) {
-        const customEl: RegexElement = {
-          id: `custom-${Date.now()}`,
-          type: "custom",
-          category: "literal",
-          label: "Manual",
-          value: manualPattern,
-          color: "#f59e0b",
-          description: "Regex digitada manualmente",
-          configurable: true,
-          placeholder: "regex...",
-          input: manualPattern,
-        };
-        elementsToSave = [customEl];
-      } else if (mode === "text" && !manualPattern) {
-        elementsToSave = [];
+  const saveRegexMutation = useMutation({
+    mutationFn: async (regex: SaveRegex) => {
+      const response = await axiosInstance.post("/regexes", regex);
+      if (response.status === 201) {
+        toast.success("Regex salva com sucesso!");
       }
-      const saved: SavedRegex = {
-        id: `saved-${Date.now()}`,
-        name,
-        pattern: mode === "text" ? manualPattern : pattern,
-        language,
-        elements: elementsToSave,
-        createdAt: new Date().toISOString(),
-      };
-      setSavedRegexes((prev) => [...prev, saved]);
-      setShowSaveDialog(false);
-      if (mode === "text" && manualPattern) {
-        setCanvasElements(elementsToSave);
-        setMode("visual");
-        setManualPattern("");
-      }
+      return response.data;
     },
-    [mode, manualPattern, canvasElements, pattern, language],
-  );
+  });
+
+  const saveRegex = (name: string) => {
+    let elementsToSave = canvasElements;
+    if (mode === "text" && manualPattern) {
+      const customEl: RegexElement = {
+        id: `custom-${Date.now()}`,
+        type: "custom",
+        category: "literal",
+        label: "Manual",
+        value: manualPattern,
+        color: "#f59e0b",
+        description: "Regex digitada manualmente",
+        configurable: true,
+        placeholder: "regex...",
+        input: manualPattern,
+      };
+      elementsToSave = [customEl];
+    } else if (mode === "text" && !manualPattern) {
+      elementsToSave = [];
+    }
+    const saved: SaveRegex = {
+      name,
+      pattern: mode === "text" ? manualPattern : pattern,
+      language,
+      elements: elementsToSave,
+    };
+    saveRegexMutation.mutate(saved);
+    setShowSaveDialog(false);
+    if (mode === "text" && manualPattern) {
+      setCanvasElements(elementsToSave);
+      setMode("visual");
+      setManualPattern("");
+    }
+  };
 
   const loadRegex = useCallback(
-    (saved: SavedRegex) => {
-      setLanguage(saved.language);
-      setCanvasElements(saved.elements);
+    (regex: Regex) => {
+      setLanguage(regex.language);
+      setCanvasElements(regex.elements);
       executeRegexMutation.reset();
       setMode("visual");
       setManualPattern("");
@@ -575,7 +533,6 @@ export function useDashboard() {
     canvasElements,
     testString,
     setTestString,
-    savedRegexes,
     showSaveDialog,
     setShowSaveDialog,
     dragOverIndex,
@@ -599,5 +556,6 @@ export function useDashboard() {
     saveRegex,
     loadRegex,
     executeRegexMutation,
+    saveRegexMutation,
   };
 }

@@ -1,5 +1,6 @@
 package com.gabrieudev.regexbuilder.infrastructure.persistence.repository;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -17,21 +18,23 @@ import com.gabrieudev.regexbuilder.infrastructure.persistence.entity.RegexEntity
 public interface RegexJpaRepository extends JpaRepository<RegexEntity, UUID>, JpaSpecificationExecutor<RegexEntity> {
 
     @Override
-    @EntityGraph(attributePaths = "user")
+    @EntityGraph(attributePaths = "createdBy")
     Page<RegexEntity> findAll(Specification<RegexEntity> spec, Pageable pageable);
 
     default Page<RegexEntity> findAllWithFilters(
             String pattern,
             String exactPattern,
-            String description,
+            String name,
             RegexLanguage language,
-            UUID userId,
+            UUID createdById,
+            LocalDateTime createdAtFrom,
+            LocalDateTime createdAtTo,
             Pageable pageable) {
 
         Specification<RegexEntity> spec = (root, query, cb) -> cb.conjunction();
 
         if (pattern != null && !pattern.isEmpty()) {
-            if (exactPattern != null && exactPattern.equalsIgnoreCase("true")) {
+            if ("true".equalsIgnoreCase(exactPattern)) {
                 spec = spec.and((root, query, cb) -> cb.equal(root.get("pattern"), pattern));
             } else {
                 spec = spec.and(
@@ -39,17 +42,24 @@ public interface RegexJpaRepository extends JpaRepository<RegexEntity, UUID>, Jp
             }
         }
 
-        if (description != null && !description.isEmpty()) {
-            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("description")),
-                    "%" + description.toLowerCase() + "%"));
+        if (name != null && !name.isEmpty()) {
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
         }
 
         if (language != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("language"), language));
         }
 
-        if (userId != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("user").get("id"), userId));
+        if (createdById != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("createdBy").get("id"), createdById));
+        }
+
+        if (createdAtFrom != null) {
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("createdAt"), createdAtFrom));
+        }
+
+        if (createdAtTo != null) {
+            spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("createdAt"), createdAtTo));
         }
 
         return findAll(spec, pageable);

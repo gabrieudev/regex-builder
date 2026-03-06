@@ -1,5 +1,6 @@
 package com.gabrieudev.regexbuilder.infrastructure.web.controller;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -96,14 +97,23 @@ public class RegexController {
             @CurrentUser UserPrincipal userPrincipal,
             @RequestParam(required = false) @Parameter(description = "Padrão da regex (busca parcial, case-insensitive)") String pattern,
             @RequestParam(required = false) @Parameter(description = "Padrão da regex (busca exata, case-sensitive)") String exactPattern,
-            @RequestParam(required = false) @Parameter(description = "Descrição da regex") String description,
+            @RequestParam(required = false) @Parameter(description = "Nome da regex") String name,
             @RequestParam(required = false) @Parameter(description = "Linguagem da regex") RegexLanguage language,
+            @RequestParam(required = false) @Parameter(description = "Data de criação (início)") LocalDateTime createdAtFrom,
+            @RequestParam(required = false) @Parameter(description = "Data de criação (fim)") LocalDateTime createdAtTo,
             @RequestParam(required = false, defaultValue = "0") @Parameter(description = "Número da página (0-indexada)") Integer page,
             @RequestParam(required = false, defaultValue = "10") @Parameter(description = "Tamanho da página") Integer size) {
         PaginationRequest paginationRequest = new PaginationRequest(page, size, null, true);
 
-        PaginationResponse<RegexResponse> regexes = listRegexUseCase.execute(pattern, exactPattern, description,
-                language, userPrincipal.getId(), paginationRequest);
+        PaginationResponse<RegexResponse> regexes = listRegexUseCase.execute(
+                pattern,
+                exactPattern,
+                name,
+                language,
+                userPrincipal.getId(),
+                createdAtFrom,
+                createdAtTo,
+                paginationRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body(regexes);
     }
@@ -150,8 +160,9 @@ public class RegexController {
             @ApiResponse(responseCode = "422", description = "Corpo da requisição inválido"),
     })
     @PostMapping
-    public ResponseEntity<RegexResponse> createRegex(@Valid @RequestBody CreateRegexRequest request) {
-        RegexResponse createdRegex = createRegexUseCase.execute(request);
+    public ResponseEntity<RegexResponse> createRegex(@Valid @RequestBody CreateRegexRequest request,
+            @CurrentUser UserPrincipal userPrincipal) {
+        RegexResponse createdRegex = createRegexUseCase.execute(request, userPrincipal.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRegex);
     }

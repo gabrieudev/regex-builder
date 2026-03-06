@@ -1,5 +1,7 @@
 package com.gabrieudev.regexbuilder.application.dto.regex;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
 
 import com.gabrieudev.regexbuilder.domain.enums.RegexLanguage;
@@ -19,8 +21,13 @@ public class CreateRegexRequest {
     @Length(max = 1000, message = "O campo 'pattern' deve ter no máximo 1000 caracteres")
     private String pattern;
 
-    private String description;
+    @NotBlank(message = "O campo 'name' é obrigatório")
+    @NotNull(message = "O campo 'name' é obrigatório")
+    private String name;
 
     @NotNull(message = "O campo 'language' é obrigatório")
     private RegexLanguage language;
+
+    @NotNull(message = "O campo 'elements' é obrigatório")
+    private List<RegexElement> elements;
 }

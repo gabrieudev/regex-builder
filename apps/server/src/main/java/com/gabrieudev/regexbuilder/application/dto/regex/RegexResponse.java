@@ -1,5 +1,6 @@
 package com.gabrieudev.regexbuilder.application.dto.regex;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.gabrieudev.regexbuilder.domain.enums.RegexLanguage;
@@ -15,7 +16,9 @@ import lombok.NoArgsConstructor;
 public class RegexResponse {
     private UUID id;
     private String pattern;
-    private String description;
+    private String name;
     private RegexLanguage language;
-    private User user;
+    private User createdBy;
+    private String elements;
+    private LocalDateTime createdAt;
 }

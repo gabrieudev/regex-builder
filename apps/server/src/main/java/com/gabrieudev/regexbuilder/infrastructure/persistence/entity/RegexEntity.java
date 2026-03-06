@@ -1,6 +1,11 @@
 package com.gabrieudev.regexbuilder.infrastructure.persistence.entity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import com.gabrieudev.regexbuilder.domain.enums.RegexLanguage;
 
@@ -8,6 +13,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,13 +39,22 @@ public class RegexEntity {
     @Column(nullable = false, length = 1000)
     private String pattern;
 
-    private String description;
+    @Column(nullable = false, length = 255)
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RegexLanguage language;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_id", nullable = false)
+    private UserEntity createdBy;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private String elements;
+
+    @CreationTimestamp
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 }

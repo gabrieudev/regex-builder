@@ -1,5 +1,6 @@
 package com.gabrieudev.regexbuilder.domain.port;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,8 +19,10 @@ public interface RegexRepositoryPort {
     PaginationResponse<Regex> findAllWithFilters(
             String pattern,
             String exactPattern,
-            String description,
+            String name,
             RegexLanguage language,
-            UUID userId,
+            UUID createdById,
+            LocalDateTime createdAtFrom,
+            LocalDateTime createdAtTo,
             PaginationRequest paginationRequest);
 }

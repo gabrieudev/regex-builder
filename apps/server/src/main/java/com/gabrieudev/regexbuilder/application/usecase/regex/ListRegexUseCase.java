@@ -1,5 +1,6 @@
 package com.gabrieudev.regexbuilder.application.usecase.regex;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -29,12 +30,22 @@ public class ListRegexUseCase {
     public PaginationResponse<RegexResponse> execute(
             String pattern,
             String exactPattern,
-            String description,
+            String name,
             RegexLanguage language,
-            UUID userId,
+            UUID createdById,
+            LocalDateTime createdAtFrom,
+            LocalDateTime createdAtTo,
             PaginationRequest paginationRequest) {
         PaginationResponse<Regex> result = regexRepository
-                .findAllWithFilters(pattern, exactPattern, description, language, userId, paginationRequest);
+                .findAllWithFilters(
+                        pattern,
+                        exactPattern,
+                        name,
+                        language,
+                        createdById,
+                        createdAtFrom,
+                        createdAtTo,
+                        paginationRequest);
 
         return paginationMapper.map(result, regexMapper::toResponse);
     }

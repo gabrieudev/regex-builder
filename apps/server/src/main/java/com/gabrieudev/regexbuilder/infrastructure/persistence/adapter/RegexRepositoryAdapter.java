@@ -1,5 +1,6 @@
 package com.gabrieudev.regexbuilder.infrastructure.persistence.adapter;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,8 +42,15 @@ public class RegexRepositoryAdapter implements RegexRepositoryPort {
     }
 
     @Override
-    public PaginationResponse<Regex> findAllWithFilters(String pattern, String exactPattern, String description,
-            RegexLanguage language, UUID userId, PaginationRequest paginationRequest) {
+    public PaginationResponse<Regex> findAllWithFilters(
+            String pattern,
+            String exactPattern,
+            String name,
+            RegexLanguage language,
+            UUID createdById,
+            LocalDateTime createdAtFrom,
+            LocalDateTime createdAtTo,
+            PaginationRequest paginationRequest) {
         Pageable pageable = null;
 
         if (paginationRequest.getPage() == null || paginationRequest.getSize() == null) {
@@ -51,8 +59,15 @@ public class RegexRepositoryAdapter implements RegexRepositoryPort {
             pageable = paginationMapper.toPageable(paginationRequest);
         }
 
-        Page<RegexEntity> page = regexJpaRepository.findAllWithFilters(pattern, exactPattern, description,
-                language, userId, pageable);
+        Page<RegexEntity> page = regexJpaRepository.findAllWithFilters(
+                pattern,
+                exactPattern,
+                name,
+                language,
+                createdById,
+                createdAtFrom,
+                createdAtTo,
+                pageable);
 
         return paginationMapper.toPageResponse(page.map(regexEntityMapper::toDomain));
     }

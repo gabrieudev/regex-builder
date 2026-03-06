@@ -1,5 +1,6 @@
 package com.gabrieudev.regexbuilder.domain.model;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.gabrieudev.regexbuilder.domain.enums.RegexLanguage;
@@ -7,9 +8,11 @@ import com.gabrieudev.regexbuilder.domain.enums.RegexLanguage;
 public class Regex {
     private UUID id;
     private String pattern;
-    private String description;
+    private String name;
     private RegexLanguage language;
-    private User user;
+    private User createdBy;
+    private String elements;
+    private LocalDateTime createdAt;
 
     public UUID getId() {
         return id;
@@ -27,12 +30,12 @@ public class Regex {
         this.pattern = pattern;
     }
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public RegexLanguage getLanguage() {
@@ -43,20 +46,39 @@ public class Regex {
         this.language = language;
     }
 
-    public User getUser() {
-        return user;
+    public User getCreatedBy() {
+        return createdBy;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public Regex(UUID id, String pattern, String description, RegexLanguage language, User user) {
+    public String getElements() {
+        return elements;
+    }
+
+    public void setElements(String elements) {
+        this.elements = elements;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Regex(UUID id, String pattern, String name, RegexLanguage language, User createdBy, String elements,
+            LocalDateTime createdAt) {
         this.id = id;
         this.pattern = pattern;
-        this.description = description;
+        this.name = name;
         this.language = language;
-        this.user = user;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+        this.elements = elements;
     }
 
     public Regex() {

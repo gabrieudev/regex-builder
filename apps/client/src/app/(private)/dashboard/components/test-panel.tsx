@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { ExecutionResult } from "../use-dashboard";
 import { Play } from "lucide-react";
 
 interface Props {

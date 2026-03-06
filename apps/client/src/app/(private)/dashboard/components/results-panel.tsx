@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { TriangleAlert } from "lucide-react";
-import { ExecutionResult } from "../use-dashboard";
 
 interface Props {
   result: ExecutionResult | null;

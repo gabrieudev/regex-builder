@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Language } from "../use-dashboard";
 
 interface Props {
   pattern: string;

@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RegexElement } from "../use-dashboard";
 
 interface Props {
   elements: RegexElement[];

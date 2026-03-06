@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Language } from "../use-dashboard";
 
 interface Props {
   language: Language;

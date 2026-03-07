@@ -25,7 +25,7 @@ declare global {
   }
 
   export interface User {
-    id?: number;
+    id?: string;
     name: string;
     email: string;
     imageUrl?: string;
@@ -37,8 +37,26 @@ declare global {
     emailVerificationTokenExpiry?: string;
   }
 
+  export interface RegexFilters {
+    name: string;
+    patternLike: string;
+    patternExact: string;
+    language: Language | "ALL";
+    dateFrom: Date | undefined;
+    dateTo: Date | undefined;
+  }
+
+  type EditForm = {
+    name: string;
+    pattern: string;
+    language: Language;
+    elements: RegexElement[];
+  };
+
   export type Language = "JAVA" | "PYTHON" | "JAVASCRIPT";
   export type Mode = "visual" | "text";
+  export type SortField = "name" | "pattern" | "language" | "createdAt";
+  export type SortDir = "asc" | "desc";
 
   export type ElementCategory =
     | "literal"

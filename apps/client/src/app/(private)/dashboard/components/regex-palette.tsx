@@ -16,6 +16,7 @@ interface Props {
   paletteByCategory: Record<string, RegexElement[]>;
   onDragStart: (el: RegexElement) => void;
   disabled?: boolean;
+  onItemClick?: (el: RegexElement) => void;
 }
 
 const CATEGORY_META: Record<
@@ -43,6 +44,7 @@ export function RegexPalette({
   paletteByCategory,
   onDragStart,
   disabled,
+  onItemClick,
 }: Props) {
   return (
     <Accordion
@@ -83,6 +85,7 @@ export function RegexPalette({
                     element={el}
                     onDragStart={onDragStart}
                     disabled={disabled}
+                    onClick={onItemClick}
                   />
                 ))}
               </div>
@@ -98,10 +101,12 @@ function PaletteItem({
   element,
   onDragStart,
   disabled,
+  onClick,
 }: {
   element: RegexElement;
   onDragStart: (el: RegexElement) => void;
   disabled?: boolean;
+  onClick?: (el: RegexElement) => void;
 }) {
   const handleDragStart = (e: React.DragEvent) => {
     e.stopPropagation();
@@ -119,6 +124,7 @@ function PaletteItem({
         <div
           draggable={!disabled}
           onDragStart={handleDragStart}
+          onClick={() => onClick?.(element)}
           className={`cursor-grab active:cursor-grabbing px-2.5 py-1.5 rounded-md font-mono text-xs font-bold select-none border ${
             disabled ? "opacity-40 cursor-not-allowed" : ""
           }`}

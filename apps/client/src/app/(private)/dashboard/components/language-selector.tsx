@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { JSX } from "react";
+import { FaJava, FaPython, FaJs } from "react-icons/fa";
 
 interface Props {
   language: Language;
@@ -10,12 +12,27 @@ interface Props {
 const LANGUAGES: {
   key: Language;
   label: string;
-  icon: string;
+  icon: JSX.Element;
   color: string;
 }[] = [
-  { key: "JAVASCRIPT", label: "JavaScript", icon: "JS", color: "#f7df1e" },
-  { key: "PYTHON", label: "Python", icon: "Py", color: "#3572A5" },
-  { key: "JAVA", label: "Java", icon: "Jv", color: "#b07219" },
+  {
+    key: "JAVASCRIPT",
+    label: "JavaScript",
+    icon: <FaJs className="w-3 h-3" />,
+    color: "#f7df1e",
+  },
+  {
+    key: "PYTHON",
+    label: "Python",
+    icon: <FaPython className="w-3 h-3" />,
+    color: "#3572A5",
+  },
+  {
+    key: "JAVA",
+    label: "Java",
+    icon: <FaJava className="w-3 h-3" />,
+    color: "#b07219",
+  },
 ];
 
 export function LanguageSelector({ language, onChange }: Props) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Download } from "lucide-react";
+import { Download, Menu } from "lucide-react";
 import { useRef } from "react";
 import { LanguageSelector } from "./components/language-selector";
 import { ManualRegexInput } from "./components/manual-regex-input";
@@ -15,10 +15,33 @@ import { TestPanel } from "./components/test-panel";
 import { useDashboard } from "./use-dashboard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { useSearchParams } from "next/navigation";
 
 export default function Dashboard() {
-  const dash = useDashboard();
+  const searchParams = useSearchParams();
+  const regexId = searchParams.get("id");
+  const dash = useDashboard(regexId);
   const draggedElementRef = useRef<RegexElement | null>(null);
+
+  if (dash.isLoadingRegex) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm font-mono text-gray-500">
+            Carregando regex...
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   const handlePaletteDragStart = (el: RegexElement) => {
     if (dash.mode === "text") return;
@@ -76,6 +99,53 @@ export default function Dashboard() {
             </span>
             Salvar
           </Button>
+        </div>
+
+        <div className="flex items-center gap-2 md:hidden">
+          <Sheet open={dash.isPaletteOpen} onOpenChange={dash.setIsPaletteOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="h-8 w-8">
+                <Menu className="h-4 w-4" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-64 p-0">
+              <SheetHeader className="p-4 border-b">
+                <SheetTitle className="text-sm font-mono">Elementos</SheetTitle>
+              </SheetHeader>
+              <div className="p-2 overflow-y-auto h-full">
+                <RegexPalette
+                  paletteByCategory={dash.paletteByCategory}
+                  onDragStart={() => {}} // não usado em mobile
+                  disabled={true}
+                  onItemClick={(el) => {
+                    dash.addElement(el, dash.canvasElements.length);
+                    dash.setIsPaletteOpen(false);
+                  }}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          <Sheet
+            open={dash.isReferenceOpen}
+            onOpenChange={dash.setIsReferenceOpen}
+          >
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="h-8 w-8">
+                <span className="text-xs">?</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-64 p-0">
+              <SheetHeader className="p-4 border-b">
+                <SheetTitle className="text-sm font-mono">
+                  Referência
+                </SheetTitle>
+              </SheetHeader>
+              <div className="p-2 overflow-y-auto h-full">
+                <QuickReference language={dash.language} />
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </motion.header>
 
@@ -227,7 +297,11 @@ export default function Dashboard() {
         pattern={dash.pattern}
         onSave={dash.saveRegex}
         onClose={() => dash.setShowSaveDialog(false)}
-        loading={dash.saveRegexMutation.isPending}
+        loading={
+          dash.createRegexMutation.isPending ||
+          dash.updateRegexMutation.isPending
+        }
+        initialName={dash.loadedRegex?.name}
       />
     </div>
   );

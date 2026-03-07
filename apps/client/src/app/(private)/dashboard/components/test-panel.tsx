@@ -82,7 +82,7 @@ export function TestPanel({
       <Button
         onClick={onExecute}
         disabled={!pattern || isLoading}
-        className="relative w-full py-2.5 font-mono text-sm font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+        className="relative w-full py-2.5 font-mono text-sm font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
         style={{
           background:
             !pattern || isLoading

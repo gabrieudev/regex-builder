@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
 interface Props {
@@ -16,17 +17,25 @@ interface Props {
   onSave: (name: string) => void;
   onClose: () => void;
   loading?: boolean;
+  initialName?: string;
 }
 
-export function SaveDialog({ open, pattern, onSave, onClose, loading }: Props) {
-  const [name, setName] = useState("");
+export function SaveDialog({
+  open,
+  pattern,
+  onSave,
+  onClose,
+  loading,
+  initialName,
+}: Props) {
+  const [name, setName] = useState(initialName || "");
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
         <DialogHeader>
           <DialogTitle className="text-sm font-mono text-gray-900 dark:text-gray-100">
-            Salvar regex
+            {initialName ? "Editar regex" : "Salvar regex"}
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4 py-4">
@@ -54,7 +63,7 @@ export function SaveDialog({ open, pattern, onSave, onClose, loading }: Props) {
           <Button
             onClick={() => onSave(name)}
             disabled={!name.trim() || !pattern || loading}
-            className="w-full py-2.5 font-mono text-sm font-bold transition-all disabled:opacity-40"
+            className="w-full py-2.5 font-mono text-sm font-bold transition-all disabled:opacity-40 cursor-pointer"
             style={{
               background:
                 name.trim() && pattern
@@ -65,7 +74,13 @@ export function SaveDialog({ open, pattern, onSave, onClose, loading }: Props) {
               color: name.trim() && pattern ? "#06b6d4" : undefined,
             }}
           >
-            salvar regex
+            {loading ? (
+              <Loader2 className="animate-spin" />
+            ) : initialName ? (
+              "Salvar alterações"
+            ) : (
+              "Salvar"
+            )}
           </Button>
         </div>
       </DialogContent>

@@ -2,7 +2,7 @@
 
 import axiosInstance from "@/lib/api";
 import { useMutation } from "@tanstack/react-query";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { toast } from "sonner";
 
 const ELEMENT_PALETTE: RegexElement[] = [
@@ -337,7 +337,7 @@ function buildCodeSnippet(pattern: string, language: Language): string {
   }
 }
 
-export function useDashboard() {
+export function useDashboard(regexId?: string | null) {
   const [language, setLanguage] = useState<Language>("JAVASCRIPT");
   const [canvasElements, setCanvasElements] = useState<RegexElement[]>([]);
   const [testString, setTestString] = useState<string>(
@@ -347,6 +347,49 @@ export function useDashboard() {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [mode, setMode] = useState<Mode>("visual");
   const [manualPattern, setManualPattern] = useState<string>("");
+  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
+  const [isReferenceOpen, setIsReferenceOpen] = useState(false);
+
+  const [loadedRegex, setLoadedRegex] = useState<Regex | null>(null);
+  const [isLoadingRegex, setIsLoadingRegex] = useState(false);
+
+  // Buscar regex por ID quando existir
+  useEffect(() => {
+    if (!regexId) {
+      setLoadedRegex(null);
+      return;
+    }
+
+    const fetchRegex = async () => {
+      setIsLoadingRegex(true);
+
+      try {
+        const response = await axiosInstance.get(`/regexes/${regexId}`);
+
+        const data = response.data;
+
+        setLoadedRegex({
+          ...data,
+          elements: JSON.parse(data.elements),
+        });
+      } catch (error) {
+        toast.error("Erro ao carregar regex");
+      } finally {
+        setIsLoadingRegex(false);
+      }
+    };
+
+    fetchRegex();
+  }, [regexId]);
+
+  useEffect(() => {
+    if (loadedRegex) {
+      setLanguage(loadedRegex.language);
+      setCanvasElements(loadedRegex.elements);
+      setMode("visual");
+      setManualPattern("");
+    }
+  }, [loadedRegex]);
 
   const pattern = useMemo(() => {
     if (mode === "text") return manualPattern;
@@ -430,13 +473,23 @@ export function useDashboard() {
     executeRegexMutation.reset();
   }, [executeRegexMutation]);
 
-  const saveRegexMutation = useMutation({
+  const createRegexMutation = useMutation({
     mutationFn: async (regex: SaveRegex) => {
       const response = await axiosInstance.post("/regexes", regex);
-      if (response.status === 201) {
-        toast.success("Regex salva com sucesso!");
-      }
       return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Regex salva com sucesso!");
+    },
+  });
+
+  const updateRegexMutation = useMutation({
+    mutationFn: async ({ id, ...regex }: { id: string } & SaveRegex) => {
+      const response = await axiosInstance.put(`/regexes/${id}`, regex);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Regex atualizada com sucesso!");
     },
   });
 
@@ -465,7 +518,11 @@ export function useDashboard() {
       language,
       elements: elementsToSave,
     };
-    saveRegexMutation.mutate(saved);
+    if (loadedRegex) {
+      updateRegexMutation.mutate({ id: loadedRegex.id, ...saved });
+    } else {
+      createRegexMutation.mutate(saved);
+    }
     setShowSaveDialog(false);
     if (mode === "text" && manualPattern) {
       setCanvasElements(elementsToSave);
@@ -541,6 +598,12 @@ export function useDashboard() {
     setMode: switchMode,
     manualPattern,
     setManualPattern,
+    isPaletteOpen,
+    setIsPaletteOpen,
+    isReferenceOpen,
+    setIsReferenceOpen,
+    isLoadingRegex,
+    loadedRegex,
     // Derivados
     pattern,
     codeSnippet,
@@ -556,6 +619,7 @@ export function useDashboard() {
     saveRegex,
     loadRegex,
     executeRegexMutation,
-    saveRegexMutation,
+    createRegexMutation,
+    updateRegexMutation,
   };
 }

@@ -154,7 +154,7 @@ public class RegexController {
 
     @Operation(summary = "Criar expressão regular", description = "Cria uma expressão regular de acordo com o corpo da requisição", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Expressão regular excluída com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Expressão regular criada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro interno"),
             @ApiResponse(responseCode = "401", description = "Não autenticado"),
             @ApiResponse(responseCode = "422", description = "Corpo da requisição inválido"),

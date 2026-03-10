@@ -36,7 +36,7 @@ export default function Home() {
       title: "Exportação flexível",
       description: "Use em qualquer linguagem",
       details:
-        "Exporte para JavaScript, Python, Java, PHP e outras com a sintaxe correta.",
+        "Exporte para JavaScript, Python ou Java.",
     },
   ];
 

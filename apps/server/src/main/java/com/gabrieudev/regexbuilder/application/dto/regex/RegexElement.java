@@ -16,6 +16,6 @@ public class RegexElement {
     private String color;
     private String description;
     private String input;
-    private boolean configurable;
+    private Boolean configurable;
     private String placeholder;
 }

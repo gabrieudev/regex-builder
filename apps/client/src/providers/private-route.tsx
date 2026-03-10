@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { useAuth } from "./auth-context";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   children: ReactNode;
@@ -18,7 +20,20 @@ export const PrivateRouteProvider = ({ children }: Props) => {
     }
   }, [user, loading, router]);
 
-  if (loading) return <div>Carregando...</div>;
+  if (loading)
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Card className="w-full max-w-xs">
+          <CardHeader>
+            <Skeleton className="h-4 w-2/3" />
+            <Skeleton className="h-4 w-1/2" />
+          </CardHeader>
+          <CardContent>
+            <Skeleton className="aspect-video w-full" />
+          </CardContent>
+        </Card>
+      </div>
+    );
 
   return <>{children}</>;
 };

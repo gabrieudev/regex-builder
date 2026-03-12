@@ -1,39 +1,39 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
-import { useAuth } from "./auth-context";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from 'next/navigation'
+import { type ReactNode, useEffect } from 'react'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useAuth } from './auth-context'
 
 interface Props {
-  children: ReactNode;
+	children: ReactNode
 }
 
 export const PrivateRouteProvider = ({ children }: Props) => {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+	const { user, loading } = useAuth()
+	const router = useRouter()
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.replace("/auth/login");
-    }
-  }, [user, loading, router]);
+	useEffect(() => {
+		if (!loading && !user) {
+			router.replace('/auth/login')
+		}
+	}, [user, loading, router])
 
-  if (loading)
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Card className="w-full max-w-xs">
-          <CardHeader>
-            <Skeleton className="h-4 w-2/3" />
-            <Skeleton className="h-4 w-1/2" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="aspect-video w-full" />
-          </CardContent>
-        </Card>
-      </div>
-    );
+	if (loading)
+		return (
+			<div className="flex h-screen items-center justify-center">
+				<Card className="w-full max-w-xs">
+					<CardHeader>
+						<Skeleton className="h-4 w-2/3" />
+						<Skeleton className="h-4 w-1/2" />
+					</CardHeader>
+					<CardContent>
+						<Skeleton className="aspect-video w-full" />
+					</CardContent>
+				</Card>
+			</div>
+		)
 
-  return <>{children}</>;
-};
+	return <>{children}</>
+}

@@ -252,7 +252,6 @@ export function useRegexManager() {
 	}, [])
 
 	return {
-		// State
 		regexes: paginatedItems,
 		filters,
 		sortField,
@@ -266,7 +265,6 @@ export function useRegexManager() {
 		editForm,
 		hasActiveFilters,
 		pageSizeOptions: PAGE_SIZE_OPTIONS,
-		// Actions
 		updateFilter,
 		resetFilters,
 		toggleSort,

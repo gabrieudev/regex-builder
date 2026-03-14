@@ -370,7 +370,7 @@ export function useDashboard(regexId?: string | null) {
 					...data,
 					elements: JSON.parse(data.elements),
 				})
-			} catch (_error) {
+			} catch {
 				toast.error('Erro ao carregar regex')
 			} finally {
 				setIsLoadingRegex(false)
@@ -580,7 +580,6 @@ export function useDashboard(regexId?: string | null) {
 	}, [palette])
 
 	return {
-		// Estado
 		language,
 		setLanguage,
 		canvasElements,
@@ -600,12 +599,10 @@ export function useDashboard(regexId?: string | null) {
 		setIsReferenceOpen,
 		isLoadingRegex,
 		loadedRegex,
-		// Derivados
 		pattern,
 		codeSnippet,
 		palette,
 		paletteByCategory,
-		// Ações
 		addElement,
 		removeElement,
 		updateElementInput,

@@ -15,6 +15,7 @@ public class Collection {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private User user;
+    private List<Regex> regexes;
 
     public UUID getId() {
         return id;
@@ -97,7 +98,7 @@ public class Collection {
     }
 
     public Collection(UUID id, String name, String description, String color, String icon, boolean pinned,
-            List<String> tags, LocalDateTime createdAt, LocalDateTime updatedAt, User user) {
+            List<String> tags, LocalDateTime createdAt, LocalDateTime updatedAt, User user, List<Regex> regexes) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -108,9 +109,18 @@ public class Collection {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.user = user;
+        this.regexes = regexes;
     }
 
     public Collection() {
+    }
+
+    public List<Regex> getRegexes() {
+        return regexes;
+    }
+
+    public void setRegexes(List<Regex> regexes) {
+        this.regexes = regexes;
     }
 
 }

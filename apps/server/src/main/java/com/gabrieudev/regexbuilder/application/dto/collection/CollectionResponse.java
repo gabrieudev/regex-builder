@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.gabrieudev.regexbuilder.application.dto.regex.RegexResponse;
 import com.gabrieudev.regexbuilder.application.dto.user.UserResponse;
 
 import lombok.AllArgsConstructor;
@@ -24,4 +25,5 @@ public class CollectionResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private UserResponse user;
+    private List<RegexResponse> regexes;
 }

@@ -13,32 +13,45 @@ import com.gabrieudev.regexbuilder.domain.model.CollectionRegexes;
 import com.gabrieudev.regexbuilder.domain.model.PaginationRequest;
 import com.gabrieudev.regexbuilder.domain.model.PaginationResponse;
 import com.gabrieudev.regexbuilder.domain.port.CollectionRegexesRepositoryPort;
+import com.gabrieudev.regexbuilder.infrastructure.persistence.entity.CollectionEntity;
 import com.gabrieudev.regexbuilder.infrastructure.persistence.entity.CollectionRegexesEntity;
 import com.gabrieudev.regexbuilder.infrastructure.persistence.mapper.CollectionRegexesEntityMapper;
 import com.gabrieudev.regexbuilder.infrastructure.persistence.mapper.PaginationMapper;
+import com.gabrieudev.regexbuilder.infrastructure.persistence.repository.CollectionJpaRepository;
 import com.gabrieudev.regexbuilder.infrastructure.persistence.repository.CollectionRegexesJpaRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class CollectionRegexesRepositoryAdapter implements CollectionRegexesRepositoryPort {
     private final CollectionRegexesJpaRepository collectionRegexesJpaRepository;
     private final CollectionRegexesEntityMapper collectionRegexesEntityMapper;
     private final PaginationMapper paginationMapper;
+    private final CollectionJpaRepository collectionJpaRepository;
 
     public CollectionRegexesRepositoryAdapter(CollectionRegexesJpaRepository collectionRegexesJpaRepository,
-            CollectionRegexesEntityMapper collectionRegexesEntityMapper, PaginationMapper paginationMapper) {
+            CollectionRegexesEntityMapper collectionRegexesEntityMapper, PaginationMapper paginationMapper,
+            CollectionJpaRepository collectionJpaRepository) {
         this.collectionRegexesJpaRepository = collectionRegexesJpaRepository;
         this.collectionRegexesEntityMapper = collectionRegexesEntityMapper;
         this.paginationMapper = paginationMapper;
+        this.collectionJpaRepository = collectionJpaRepository;
     }
 
     @Override
     public boolean delete(UUID id) {
-        try {
-            collectionRegexesJpaRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        CollectionRegexesEntity relation = collectionRegexesJpaRepository
+                .findById(id)
+                .orElseThrow();
+
+        CollectionEntity collection = relation.getCollection();
+
+        collection.getRegexes().remove(relation);
+
+        collectionJpaRepository.save(collection);
+
+        return true;
     }
 
     @Override
@@ -77,6 +90,12 @@ public class CollectionRegexesRepositoryAdapter implements CollectionRegexesRepo
         } catch (Exception e) {
             return List.of();
         }
+    }
+
+    @Override
+    public Optional<CollectionRegexes> findByCollectionIdAndRegexId(UUID collectionId, UUID regexId) {
+        return collectionRegexesJpaRepository.findByCollectionIdAndRegexId(collectionId, regexId)
+                .map(collectionRegexesEntityMapper::toDomain);
     }
 
 }

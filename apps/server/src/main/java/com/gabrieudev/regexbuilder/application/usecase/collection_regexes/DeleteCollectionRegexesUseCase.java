@@ -4,12 +4,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gabrieudev.regexbuilder.application.exception.BadRequestException;
 import com.gabrieudev.regexbuilder.application.exception.ResourceNotFoundException;
 import com.gabrieudev.regexbuilder.domain.model.Collection;
 import com.gabrieudev.regexbuilder.domain.model.CollectionRegexes;
-import com.gabrieudev.regexbuilder.domain.model.PaginationRequest;
 import com.gabrieudev.regexbuilder.domain.model.Regex;
 import com.gabrieudev.regexbuilder.domain.port.CollectionRegexesRepositoryPort;
 import com.gabrieudev.regexbuilder.domain.port.CollectionRepositoryPort;
@@ -28,6 +28,7 @@ public class DeleteCollectionRegexesUseCase {
         this.regexRepositoryPort = regexRepositoryPort;
     }
 
+    @Transactional
     public void execute(UUID collectionId, UUID regexId) {
         Optional<Collection> collectionOptional = collectionRepositoryPort.findById(collectionId);
         Optional<Regex> regexOptional = regexRepositoryPort.findById(regexId);
@@ -41,16 +42,14 @@ public class DeleteCollectionRegexesUseCase {
         }
 
         CollectionRegexes collectionRegexes = collectionRegexesRepositoryPort
-                .findAllWithFilters(collectionId, regexId, null, null, null, null, new PaginationRequest())
-                .getContent()
-                .stream()
-                .findFirst()
+                .findByCollectionIdAndRegexId(collectionId, regexId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Relação entre coleção e regex", "collectionId e regexId",
-                        String.format("%s e %s", collectionId, regexId)));
+                        collectionId.toString() + " e " + regexId.toString()));
 
         if (!collectionRegexesRepositoryPort.delete(collectionRegexes.getId())) {
-            throw new BadRequestException("Erro ao deletar a relação entre coleção e regex, tente novamente mais tarde.");
+            throw new BadRequestException(
+                    "Erro ao deletar a relação entre coleção e regex, tente novamente mais tarde.");
         }
     }
 }

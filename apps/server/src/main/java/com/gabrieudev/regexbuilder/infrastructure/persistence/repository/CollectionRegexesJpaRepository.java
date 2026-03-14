@@ -1,6 +1,7 @@
 package com.gabrieudev.regexbuilder.infrastructure.persistence.repository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -68,4 +69,6 @@ public interface CollectionRegexesJpaRepository
 
         return findAll(spec, pageable);
     }
+
+    Optional<CollectionRegexesEntity> findByCollectionIdAndRegexId(UUID collectionId, UUID regexId);
 }

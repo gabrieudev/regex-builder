@@ -28,4 +28,7 @@ public class CreateCollectionRequest {
 
     @NotNull(message = "Campo 'tags' é obrigatório")
     private List<String> tags;
+
+    @NotNull(message = "Campo 'pinned' é obrigatório")
+    private boolean pinned;
 }

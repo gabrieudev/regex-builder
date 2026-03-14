@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gabrieudev.regexbuilder.application.dto.collection.CollectionResponse;
 import com.gabrieudev.regexbuilder.application.mapper.CollectionMapper;
@@ -27,6 +28,7 @@ public class ListCollectionsUseCase {
         this.paginationMapper = paginationMapper;
     }
 
+    @Transactional(readOnly = true)
     public PaginationResponse<CollectionResponse> execute(
             String name,
             String description,

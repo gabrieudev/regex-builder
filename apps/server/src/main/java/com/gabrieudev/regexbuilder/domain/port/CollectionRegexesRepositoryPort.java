@@ -16,6 +16,8 @@ public interface CollectionRegexesRepositoryPort {
 
     boolean delete(UUID id);
 
+    Optional<CollectionRegexes> findByCollectionIdAndRegexId(UUID collectionId, UUID regexId);
+
     PaginationResponse<CollectionRegexes> findAllWithFilters(
             UUID collectionId,
             UUID regexId,

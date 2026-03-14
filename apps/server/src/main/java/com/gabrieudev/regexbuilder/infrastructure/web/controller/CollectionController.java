@@ -73,8 +73,9 @@ public class CollectionController {
             @ApiResponse(responseCode = "422", description = "Corpo da requisição inválido"),
     })
     @PostMapping
-    public ResponseEntity<CollectionResponse> createCollection(@Valid @RequestBody CreateCollectionRequest request) {
-        CollectionResponse response = createCollectionUseCase.execute(request);
+    public ResponseEntity<CollectionResponse> createCollection(@Valid @RequestBody CreateCollectionRequest request,
+            @CurrentUser UserPrincipal userPrincipal) {
+        CollectionResponse response = createCollectionUseCase.execute(request, userPrincipal.getId());
         return ResponseEntity.ok(response);
     }
 

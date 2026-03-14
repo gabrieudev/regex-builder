@@ -1,5 +1,6 @@
 package com.gabrieudev.regexbuilder.application.usecase.collection;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,6 +35,8 @@ public class UpdateCollectionUseCase {
         Collection domainCollection = existingCollection.get();
 
         collectionMapper.updateDomainFromRequest(collectionRequest, domainCollection);
+
+        domainCollection.setUpdatedAt(LocalDateTime.now());
 
         return collectionRepositoryPort.save(domainCollection)
                 .map(collectionMapper::toResponse)

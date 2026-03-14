@@ -7,8 +7,11 @@ import org.mapstruct.MappingTarget;
 import com.gabrieudev.regexbuilder.application.dto.collection.CollectionResponse;
 import com.gabrieudev.regexbuilder.application.dto.collection.CreateCollectionRequest;
 import com.gabrieudev.regexbuilder.application.dto.collection.UpdateCollectionRequest;
+import com.gabrieudev.regexbuilder.application.dto.regex.RegexResponse;
 import com.gabrieudev.regexbuilder.domain.model.Collection;
 import com.gabrieudev.regexbuilder.infrastructure.persistence.entity.CollectionEntity;
+import com.gabrieudev.regexbuilder.infrastructure.persistence.entity.CollectionRegexesEntity;
+import com.gabrieudev.regexbuilder.infrastructure.persistence.entity.RegexEntity;
 
 @Mapper(componentModel = "spring")
 public interface CollectionMapper {
@@ -17,16 +20,20 @@ public interface CollectionMapper {
     Collection toDomain(CollectionEntity entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "pinned", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     Collection toDomain(CreateCollectionRequest request);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "pinned", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     void updateDomainFromRequest(UpdateCollectionRequest request, @MappingTarget Collection domain);
+
+    RegexResponse map(RegexEntity entity);
+
+    default RegexResponse map(CollectionRegexesEntity entity) {
+        return entity == null ? null : map(entity.getRegex());
+    }
 }

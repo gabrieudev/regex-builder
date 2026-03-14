@@ -59,7 +59,6 @@ export function LanguageSelector({ language, onChange }: Props) {
 							className="w-5 h-5 rounded text-[9px] flex items-center justify-center font-black"
 							style={{
 								background: language === lang.key ? `${lang.color}22` : 'transparent',
-								border: language === lang.key ? `1px solid ${lang.color}44` : '1px solid #d1d5db',
 							}}
 						>
 							{lang.icon}

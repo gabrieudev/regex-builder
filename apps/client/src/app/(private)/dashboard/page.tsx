@@ -104,7 +104,7 @@ export default function Dashboard() {
 							<div className="p-2 overflow-y-auto h-full">
 								<RegexPalette
 									paletteByCategory={dash.paletteByCategory}
-									onDragStart={() => {}} // não usado em mobile
+									onDragStart={() => {}}
 									disabled={true}
 									onItemClick={(el) => {
 										dash.addElement(el, dash.canvasElements.length)

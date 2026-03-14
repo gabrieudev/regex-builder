@@ -8,6 +8,6 @@
     "wait-on": "^7.0.1"
   },
   "scripts": {
-    "dev": "concurrently -n SERVER,CLIENT -c blue,green \"npm --prefix apps/server run dev\" \"npm --prefix apps/client run dev\""
+    "dev": "concurrently -n SERVER,CLIENT,DOCS -c blue,green,magenta \"npm --prefix apps/server run dev\" \"npm --prefix apps/client run dev\" \"npm --prefix apps/docs run dev\""
   }
 }

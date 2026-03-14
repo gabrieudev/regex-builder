@@ -27,7 +27,7 @@
 </p>
 
 <p align="center">
-  <b>Regex Builder é uma aplicação que oferece um ambiente visual interativo para criar, testar e gerenciar expressões regulares. Com um runner integrado que exibe correspondências em tempo real, os usuários podem validar padrões contra textos de exemplo, visualizar grupos de captura e entender a lógica por trás de cada regex através de explicações automáticas. O projeto inclui um sistema completo de autenticação (cadastro, login, verificação de e-mail) e permite que cada usuário organize suas expressões favoritas em uma biblioteca pessoal. A interface é totalmente responsiva, com animações suaves e componentes acessíveis, proporcionando uma experiência fluida tanto para iniciantes quanto para desenvolvedores experientes que desejam dominar a arte das expressões regulares.
+  <b><a href="https://regexbuilder-client.vercel.app/">Regex Builder</a> é uma aplicação que oferece um ambiente visual interativo para criar, testar e gerenciar expressões regulares. Com um runner integrado que exibe correspondências em tempo real, os usuários podem validar padrões contra textos de exemplo, visualizar grupos de captura e entender a lógica por trás de cada regex através de explicações automáticas. O projeto inclui um sistema completo de autenticação (cadastro, login, verificação de e-mail) e permite que cada usuário organize suas expressões favoritas em uma biblioteca pessoal. A interface é totalmente responsiva, com animações suaves e componentes acessíveis, proporcionando uma experiência fluida tanto para iniciantes quanto para desenvolvedores experientes que desejam dominar a arte das expressões regulares.
   </b>
 </p>
 

@@ -35,9 +35,9 @@
 
 ```yaml
 ├── apps/
-│   ├── docs/     # Documentação (Fumadocs + Next.js)
-│   ├── client/   # Projeto web (TypeScript + Next.js)
-│   └── server/   # Projeto backend (Java + Spring)
+│   ├── docs/    # Documentação (Fumadocs + Next.js)
+│   ├── client/  # Projeto web (TypeScript + Next.js)
+│   └── server/  # Projeto backend (Java + Spring)
 ```
 
 <h2 id="inicio">🚀 Primeiros Passos</h2>
@@ -101,8 +101,8 @@ npm run dev
 
 Agora, você poderá interagir com a aplicação das seguintes formas:
 
-- Interface: [http://localhost:3001](http://localhost:3001)
-- Servidor: [http://localhost:3000](http://localhost:3000)
+- Interface: [http://localhost:3001](http://localhost:3000)
+- Servidor (Swagger UI): [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 - Documentação: [http://localhost:4000](http://localhost:4000)
 
 <h2 id="contribuir">📫 Contribuir</h2>

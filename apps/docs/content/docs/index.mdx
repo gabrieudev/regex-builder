@@ -1,13 +1,129 @@
 ---
-title: Hello World
-description: Your first document
+title: Visão Geral
+description: Uma visão aprofundada da arquitetura, fluxos e funcionalidades do Regex Builder
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+# Visão Geral
 
-## What is Next?
+O **Regex Builder** é uma plataforma full-stack projetada para democratizar o uso de expressões regulares, combinando uma interface visual intuitiva com um backend robusto. Ele atende tanto iniciantes que desejam aprender a sintaxe quanto desenvolvedores experientes que buscam produtividade e organização.
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
-</Cards>
+## Estrutura do Projeto
+
+O projeto é estruturado como um monorepo contendo três aplicações principais:
+
+```
+├── apps/
+│   ├── client/   # Frontend Next.js (TypeScript, Tailwind, shadcn/ui)
+│   ├── server/   # Backend Spring Boot (Java, PostgreSQL, JWT)
+│   └── docs/     # Documentação com Fumadocs (MDX)
+```
+
+### Frontend (Next.js)
+
+- **Framework**: Next.js 14+ com App Router.
+- **Estilização**: Tailwind CSS + shadcn/ui para componentes acessíveis e customizáveis.
+- **Estado e dados**:
+  - `@tanstack/react-query` para gerenciamento de requisições assíncronas e cache.
+  - Hooks customizados (`useRegexManager`, `useDashboard`, `useCollections`) que encapsulam a lógica de negócio.
+- **Animações**: Framer Motion para transições suaves e feedback visual.
+- **Formulários e interações**: Drag-and-drop nativo, inputs controlados, sheets e modais.
+
+### Backend (Spring Boot)
+
+- **Java 17+** com Spring Boot 3.
+- **Segurança**: Spring Security com JWT e OAuth2 (Google, GitHub).
+- **Banco de dados**: PostgreSQL com Hibernate (JPA).
+- **API REST**: Documentada automaticamente com Swagger/OpenAPI.
+- **Validação e tratamento de erros**: Bean Validation e handlers globais.
+
+## Funcionalidades Detalhadas
+
+### 1. Construtor Visual de Regex
+
+O coração da aplicação é um ambiente visual onde o usuário pode construir expressões regulares arrastando blocos.
+
+- **Paleta de Elementos**: Dividida em categorias (Literais, Classes, Quantificadores, Âncoras, Grupos, Lookarounds). Cada elemento possui cor, descrição e, quando configurável, um campo de entrada.
+- **Canvas Interativo**:
+  - Arraste elementos da paleta para o canvas.
+  - Reordene elementos arrastando-os dentro do canvas.
+  - Remova elementos com o botão "✕".
+  - Elementos configuráveis (ex.: `{n}`, `[abc]`) exibem um input inline.
+- **Modo Texto**: Alternativa para quem prefere digitar a regex manualmente. O modo texto também permite visualizar a regex construída.
+
+### 2. Runner de Testes em Tempo Real
+
+- **Entrada de Teste**: Área de texto para digitar a string alvo.
+- **Execução**: Ao clicar em "Executar", a regex é enviada ao backend (ou processada localmente) e o resultado é exibido.
+- **Destaque de Correspondências**: As partes da string que correspondem à regex são destacadas visualmente.
+- **Resultados Estruturados**:
+  - Lista de matches.
+  - Grupos de captura (numerados e nomeados).
+  - Tempo de execução.
+  - Avisos e erros.
+- **Código de Exemplo**: Geração automática de trechos de código nas linguagens suportadas (JavaScript, Python, Java) para facilitar a integração.
+
+### 3. Gerenciamento de Regex Salvas
+
+- **Listagem com Filtros e Ordenação**:
+  - Filtros por nome, padrão (contém ou exato), linguagem e data.
+  - Ordenação por nome, linguagem ou data (asc/desc).
+  - Paginação com opções de 5, 10, 20 ou 50 itens.
+- **Ações em Massa e Individuais**:
+  - Copiar padrão para a área de transferência.
+  - Editar (redireciona para o dashboard com os dados carregados).
+  - Excluir com confirmação.
+- **Tabela Responsiva**: Com tooltips, badges de linguagem e animações de entrada/saída.
+
+### 4. Coleções Temáticas
+
+- **Criação de Coleções**: Nome, descrição, cor personalizada, ícone (de um conjunto pré-definido) e tags.
+- **Visualizações**:
+  - **Grade**: Cards com preview dos padrões, estatísticas e ações.
+  - **Lista**: Linhas compactas com informações resumidas.
+- **Detalhamento**: Ao clicar em uma coleção, abre-se uma sheet com abas:
+  - **Regex**: Lista das regex na coleção, com opção de remover.
+  - **Estatísticas**: Distribuição por linguagem, gráficos de barras simples, métricas.
+  - **Configurações**: Editar ou excluir a coleção.
+- **Adição de Regex**: Através de um comando, o usuário pode buscar regex existentes e adicioná-las à coleção.
+
+### 5. Autenticação e Perfil
+
+- **Cadastro/Login**: Com e-mail/senha ou provedores OAuth2 (Google, GitHub).
+- **Verificação de E-mail**: Envio de e-mail de confirmação.
+- **Rotas Privadas**: Acesso apenas para usuários autenticados (protegido por `PrivateRouteProvider`).
+- **JWT**: Tokens armazenados de forma segura e enviados em cada requisição.
+
+## Fluxos de Usuário Típicos
+
+### A. Criar e testar uma nova regex
+
+1. Acessa o dashboard.
+2. Escolhe o modo visual ou texto.
+3. Constrói a regex arrastando elementos ou digitando.
+4. Digita uma string de teste e executa.
+5. Visualiza os matches e grupos.
+6. Se satisfeito, clica em "Salvar", dá um nome e confirma.
+7. A regex é armazenada e aparece na lista de regex salvas.
+
+### B. Organizar regex em coleções
+
+1. Na página de coleções, cria uma nova coleção (nome, cor, ícone).
+2. Abre a coleção recém-criada.
+3. Na aba "Adicionar regex", busca por padrões existentes e seleciona alguns.
+4. Confirma a adição.
+5. Visualiza as regex adicionadas na aba "Regex".
+6. Pode remover ou adicionar mais depois.
+
+### C. Editar uma regex existente
+
+1. Na lista de regex salvas, encontra a regex desejada.
+2. Clica no ícone de editar (lápis).
+3. É redirecionado ao dashboard com os dados carregados.
+4. Modifica a regex (visual ou texto) e testa novamente.
+5. Salva as alterações (substitui a versão anterior).
+
+## Próximos Passos
+
+- Explore os [Guias e Tutoriais](/docs/guides) para aprender a usar cada funcionalidade passo a passo.
+- Consulte a [Referência da API](/docs/api-reference) para integrações.
+- Confira o [README do projeto](https://github.com/gabrieudev/regex-builder) para instruções de instalação e contribuição.

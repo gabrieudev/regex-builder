@@ -1,0 +1,275 @@
+---
+title: Guias e Tutoriais
+description: Aprenda a utilizar todas as funcionalidades do Regex Builder com exemplos práticos
+---
+
+# Guias e Tutoriais
+
+Bem-vindo à seção de guias! Aqui você encontrará tutoriais detalhados para dominar o Regex Builder, desde o básico até dicas avançadas.
+
+## Índice
+
+- [Como usar o construtor visual](#construtor-visual)
+- [Testando expressões com o runner](#testando-expressoes)
+- [Salvando e gerenciando suas regex](#salvando-regex)
+- [Criando e organizando coleções](#criando-colecoes)
+- [Exportando código para diferentes linguagens](#exportando-codigo)
+- [Dicas de produtividade](#dicas)
+
+---
+
+<a id="construtor-visual"></a>
+## Como usar o construtor visual
+
+O construtor visual permite montar expressões regulares arrastando blocos, sem necessidade de digitar a sintaxe.
+
+### Objetivos desta seção
+- Entender a interface do construtor.
+- Aprender a criar, editar e remover elementos.
+- Saber alternar entre visual e texto.
+
+### Acessando o dashboard
+Após fazer login, clique em **Dashboard** no menu superior. Você verá três colunas:
+
+- **Esquerda**: Paleta de elementos (categorias, exemplos e templates).
+- **Centro**: Canvas de construção (onde os blocos são organizados).
+- **Direita**: Referência rápida (documentação de tokens / flags).
+
+#### Subtópicos: visibilidade e permissões
+- Usuários com permissão de leitura só podem visualizar e clonar.
+- Usuários com permissão de edição podem salvar e exportar.
+
+### Adicionando elementos (passo a passo)
+1. Na paleta, localize a categoria desejada (ex.: *Quantificadores*).
+2. Clique e arraste um elemento (ex.: `+`) para o canvas.
+3. Solte sobre o canvas ou entre elementos existentes — uma linha azul indica a posição de inserção.
+
+#### Dicas rápidas
+- Use busca na paleta para encontrar elementos por nome.
+- Segure `Shift` ao arrastar para duplicar o elemento selecionado.
+
+### Configurando elementos
+Alguns elementos possuem campos configuráveis:
+
+- **Literal**: digite o texto exato.
+- **Classe de caracteres**: digite os caracteres (ex.: `a-z0-9`).
+- **Quantificador `{n}`**: digite o número exato.
+- **Quantificador `{n,m}`**: digite no formato `min,max`.
+
+Basta clicar no input dentro do elemento e digitar.
+
+### Reordenando elementos
+Arraste qualquer elemento já no canvas para uma nova posição. Uma linha azul indica onde ele será inserido.
+
+### Removendo elementos
+Passe o mouse sobre o elemento e clique no "✕" que aparece.
+
+### Alternando para modo texto
+Se preferir digitar a regex manualmente, clique no botão **Texto** no cabeçalho.
+
+- **Sincronização**: ao voltar para o modo visual, a regex digitada será convertida em um elemento `custom`.  
+- **Nota**: conversão pode falhar para padrões muito complexos — nesses casos use modo texto para editar diretamente.
+
+### Erros comuns no construtor visual
+- Inserir quantificadores em locais inválidos (ex.: aplicar `+` diretamente sobre um quantificador).
+- Esquecer de escapar caracteres especiais ao usar literals (`.` `*` `?` etc.).
+- Blocos aninhados sem fechamento lógico (ex.: grupo aberto sem fechamento).
+
+---
+
+<a id="testando-expressoes"></a>
+## Testando expressões com o runner
+
+Após construir sua regex, é hora de testá-la.
+
+### Objetivos desta seção
+- Configurar e executar testes.
+- Interpretar resultados e warnings.
+- Usar exemplos práticos para validar padrões.
+
+### Executando um teste
+1. No painel inferior, localize a área **Teste**.
+2. Digite uma ou mais linhas de texto no campo de entrada.
+3. Configure flags (ex.: `g`, `m`, `i`) se necessário.
+4. Clique no botão **Executar regex**.
+
+### Interpretando os resultados
+Os resultados aparecem logo abaixo, divididos em seções:
+
+- **Barra de status**: mostra sucesso/falha, tempo de execução e se houve correspondência total.
+- **Correspondências destacadas**: na string de teste, os trechos que casam são marcados.
+- **Correspondências listadas**: abaixo, uma lista com os valores encontrados.
+- **Grupos de captura**: exibidos em abas separadas (numéricos e nomeados).
+- **Avisos**: problemas como backtracking excessivo ou padrões ineficientes.
+
+### Exemplo prático: validador de e-mails (visão geral)
+Construa visualmente:
+
+1. Elemento: **Classe de caracteres** com `[a-zA-Z0-9._%+-]`
+2. Elemento: **Quantificador** `+`
+3. Elemento: **Literal** `@`
+4. Elemento: **Classe de caracteres** `[a-zA-Z0-9.-]` + quantificador `+`
+5. Elemento: **Literal** `\.` (ponto escapado)
+6. Elemento: **Classe de caracteres** `[a-zA-Z]` com quantificador `{2,}`
+
+Teste com `joao@exemplo.com`. O runner destacará o e-mail completo.
+
+### Testes avançados
+- Teste com entradas de borda: strings vazias, múltiplas linhas, caracteres unicode.
+- Use mocks com múltiplos exemplos separados por `\n` para validar comportamento `multiline`.
+
+### Erros comuns no runner
+- Esquecer de ativar a flag `m` para testar ^ e $ por linha.
+- Usar grupos capturadores desnecessários que poluem a saída.
+- Padrões ambíguos que causam backtracking (use quantificadores possivelmente possessivos se suportados).
+
+---
+
+<a id="salvando-regex"></a>
+## Salvando e gerenciando suas regex
+
+Depois de criar uma regex útil, salve-a para uso futuro.
+
+### Objetivos desta seção
+- Salvar, editar, versionar e compartilhar regex.
+- Aplicar filtros e ordenações para encontrar padrões rapidamente.
+
+### Salvando uma nova regex
+1. No dashboard, após construir e testar, clique em **Salvar** no cabeçalho.
+2. No diálogo, digite um nome significativo (ex.: "Validador de e-mail").
+3. Opcional: adicione descrição, tags e linguagem alvo.
+4. Confirme. A regex será armazenada no servidor.
+
+### Visualizando suas regex salvas
+Acesse a página **Regex Salvas** no menu. Você verá uma tabela com todas as suas expressões (colunas: Nome, Linguagem, Padrão, Criado em, Última alteração).
+
+### Filtrando e pesquisando
+Use a barra de filtros acima da tabela:
+
+- **Nome**: busca por parte do nome.
+- **Padrão (contém)**: busca por trechos do padrão.
+- **Padrão (exato)**: busca por padrão idêntico.
+- **Idioma**: selecione JavaScript, Python, Java ou Todos.
+- **Criado a partir de / até**: intervalo de datas.
+
+Os filtros são aplicados automaticamente após 500ms de digitação.
+
+### Ordenando
+Clique nos cabeçalhos da tabela (Nome, Idioma, Criado em) para alternar ordem asc/desc.
+
+### Editando uma regex
+1. Na linha da regex, clique no ícone de lápis.
+2. Você será redirecionado ao dashboard com a regex carregada.
+3. Faça as alterações desejadas e salve.
+
+### Versionamento e histórico
+- Cada salvamento cria uma versão; você pode restaurar versões anteriores.
+- Comentários de versionamento ajudam a entender alterações.
+
+### Excluindo uma regex
+Clique no ícone de lixeira e confirme a exclusão no diálogo de alerta. (A exclusão é irreversível a menos que exista um backup.)
+
+---
+
+<a id="criando-colecoes"></a>
+## Criando e organizando coleções
+
+Coleções ajudam a agrupar regex por tema, projeto ou linguagem.
+
+### Objetivos desta seção
+- Agrupar regex relevantes.
+- Compartilhar conjuntos com equipes.
+- Analisar estatísticas por coleções.
+
+### Criando uma coleção
+1. Acesse **Coleções** no menu.
+2. Clique em **Nova coleção**.
+3. Preencha:
+   - **Nome** (obrigatório)
+   - **Descrição** (opcional)
+   - **Cor** (opções predefinidas)
+   - **Ícone** (selecionável)
+   - **Tags** (palavras-chave separadas por vírgula)
+4. Clique em **Criar coleção**.
+
+### Adicionando regex a uma coleção
+1. Abra a coleção desejada.
+2. Vá para a aba **Regex**.
+3. Na seção "Adicionar regex", use o campo de busca para encontrar regex existentes.
+4. Marque as que deseja adicionar.
+5. Clique em **Adicionar X regex(es)**.
+
+### Visualizando e removendo regex da coleção
+Na aba **Regex**, cada item tem controles para editar, abrir ou remover (ícone de lixeira).
+
+### Estatísticas da coleção
+A aba **Estatísticas** exibe:
+
+- Distribuição de linguagens (gráfico).
+- Total de regex.
+- Número de linguagens distintas.
+- Datas de criação e atualização.
+
+### Editando ou excluindo a coleção
+Na aba **Configurações**, você pode:
+
+- Alterar nome, cor, ícone e tags.
+- Excluir a coleção (regex permanecem na base, apenas desvinculadas).
+
+### Boas práticas para coleções
+- Crie coleções por projeto ou domínio (ex.: "Validação de formulários", "Logs").
+- Use tags consistentes (snake_case ou kebab-case) para facilitar busca.
+
+---
+
+<a id="exportando-codigo"></a>
+## Exportando código para diferentes linguagens
+
+O Regex Builder gera trechos de código prontos para JavaScript, Python e Java. A interface também permite copiar o padrão e as flags.
+
+### Objetivos desta seção
+- Entender como cada linguagem trata flags e escapes.
+- Copiar/colar exemplos prontos para uso.
+
+### Visualizando o código
+1. No dashboard, após construir a regex, olhe o painel **Padrão**.
+2. Clique no botão **código** para alternar entre a visualização do padrão e do código.
+3. Selecione a linguagem desejada no seletor.
+
+### Copiando o código
+Clique no botão **copiar** ao lado do bloco de código.
+
+### Exemplos de código gerado
+
+**JavaScript (com flags `g` e `m`):**
+```javascript
+// JavaScript: padrão com flags (g = global, m = multiline)
+const pattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gm;
+const matches = testString.match(pattern);
+console.log(matches);
+```
+
+**Python (usando raw string e re.MULTILINE):**
+```python
+# Python: usa raw strings para evitar duplo escape
+import re
+
+pattern = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", re.MULTILINE)
+matches = pattern.findall(test_string)
+for match in matches:
+    print(match)
+```
+
+**Java (usando java.util.regex):**
+```java
+// Java: lembre de escapar a barra invertida no string literal Java
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+Pattern p = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}", Pattern.MULTILINE);
+Matcher m = p.matcher(testString);
+while (m.find()) {
+    System.out.println(m.group());
+}
+```
+

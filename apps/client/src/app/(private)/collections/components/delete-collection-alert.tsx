@@ -87,11 +87,11 @@ export function DeleteCollectionAlert({ target, onConfirm, onCancel, isDeleting 
 
 				<AlertDialogFooter>
 					<AlertDialogCancel className="cursor-pointer" onClick={onCancel} disabled={isDeleting}>
-						cancelar
+						Cancelar
 					</AlertDialogCancel>
 					<AlertDialogAction className="cursor-pointer" onClick={onConfirm} disabled={isDeleting}>
 						{isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-						excluir coleção
+						Excluir
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

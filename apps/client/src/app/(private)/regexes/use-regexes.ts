@@ -114,7 +114,11 @@ export function useRegexManager() {
 		return response.data.content as Regex[]
 	}
 
-	const { data: regexes = [], refetch: refetchRegexes } = useQuery<Regex[]>({
+	const {
+		data: regexes = [],
+		refetch: refetchRegexes,
+		isLoading: isLoadingRegexes,
+	} = useQuery<Regex[]>({
 		queryKey: ['regexes', apiFilters],
 		queryFn: () => fetchRegexes(apiFilters),
 	})
@@ -122,6 +126,9 @@ export function useRegexManager() {
 	const executeDeleteMutation = useMutation({
 		mutationFn: async (id: string) => {
 			await axiosInstance.delete(`/regexes/${id}`)
+		},
+		onSuccess: () => {
+			toast.success('Regex deletada com sucesso!', { duration: 3000 })
 		},
 		onError: (error) => {
 			toast.error(`Falha ao deletar regex: ${error instanceof AxiosError ? error.message : 'Erro desconhecido'}`)
@@ -278,5 +285,6 @@ export function useRegexManager() {
 		goToPage,
 		updatePageSize,
 		refetchRegexes,
+		isLoadingRegexes,
 	}
 }

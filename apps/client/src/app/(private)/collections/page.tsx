@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
-import { LayoutGrid, List, Plus, Search } from 'lucide-react'
+import { AlertCircle, LayoutGrid, List, Plus, Search } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,6 +11,7 @@ import { CollectionDetailSheet } from './components/collection-detail-sheet'
 import { CreateCollectionDialog } from './components/create-collection-dialog'
 import { DeleteCollectionAlert } from './components/delete-collection-alert'
 import { useCollections } from './use-collections'
+import { LoadingSkeleton } from '@/components/loading-skeleton'
 
 export default function CollectionsPage() {
 	const c = useCollections()
@@ -128,13 +129,26 @@ export default function CollectionsPage() {
 						className="gap-2 bg-success/10 border border-success/40 text-success hover:bg-success/20 shadow-success-glow cursor-pointer"
 					>
 						<Plus className="w-3.5 h-3.5" />
-						nova coleção
+						Nova coleção
 					</Button>
 				</motion.div>
 
 				<LayoutGroup>
 					<AnimatePresence mode="wait">
-						{c.collections.length === 0 ? (
+						{c.isLoadingCollections ? (
+							<motion.div
+								key="loading"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								exit={{ opacity: 0 }}
+								className="flex-1 flex items-center justify-center py-24"
+							>
+								<div className="w-full max-w-7xl px-4">
+									<LoadingSkeleton viewMode={c.viewMode === 'grid' ? 'grid' : 'list'} count={c.viewMode === 'grid' ? 8 : 5} />
+									<p className="sr-only">Carregando coleções...</p>
+								</div>
+							</motion.div>
+						) : c.collections.length === 0 ? (
 							<motion.div
 								key="empty"
 								initial={{ opacity: 0 }}
@@ -152,12 +166,12 @@ export default function CollectionsPage() {
 										}}
 										className="text-5xl opacity-20 text-muted-foreground"
 									>
-										⬡
+										<AlertCircle className="w-12 h-12" />
 									</motion.div>
-									<p className="text-sm font-mono text-muted-foreground">nenhuma coleção encontrada</p>
+									<p className="text-sm font-mono text-muted-foreground">Nenhuma coleção encontrada</p>
 									<Button onClick={c.openCreate} variant="outline" size="sm" className="gap-2">
 										<Plus className="w-3 h-3" />
-										criar sua primeira coleção
+										Criar sua primeira coleção
 									</Button>
 								</div>
 							</motion.div>
@@ -206,7 +220,7 @@ export default function CollectionsPage() {
 										<Plus className="w-5 h-5 text-muted-foreground group-hover:text-success transition-colors" />
 									</motion.div>
 									<span className="text-xs font-mono text-muted-foreground group-hover:text-success transition-colors">
-										nova coleção
+										Nova coleção
 									</span>
 								</motion.button>
 							</motion.div>

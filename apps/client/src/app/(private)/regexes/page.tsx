@@ -84,6 +84,7 @@ export default function RegexesPage() {
 						onSort={mgr.toggleSort}
 						onEdit={handleEdit}
 						onDelete={mgr.openDelete}
+						isLoadingRegexes={mgr.isLoadingRegexes}
 					/>
 				</motion.div>
 

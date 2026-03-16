@@ -70,7 +70,11 @@ export function useCollections() {
 		tags: '',
 	})
 
-	const { data: fetchedCollections = [], refetch: refetchCollections } = useQuery<Collection[]>({
+	const {
+		data: fetchedCollections = [],
+		refetch: refetchCollections,
+		isLoading: isLoadingCollections,
+	} = useQuery<Collection[]>({
 		queryKey: ['collections', search],
 		queryFn: () => fetchCollections(search),
 	})
@@ -87,7 +91,7 @@ export function useCollections() {
 		return response.data.content as Regex[]
 	}
 
-	const { data: fetchedRegexes = [] } = useQuery<Regex[]>({
+	const { data: fetchedRegexes = [], isLoading: isLoadingRegexes } = useQuery<Regex[]>({
 		queryKey: ['regexes'],
 		queryFn: fetchRegexes,
 	})
@@ -317,6 +321,7 @@ export function useCollections() {
 		removeRegexFromCollection,
 		addRegexesToCollection,
 		fetchedRegexes,
+		isLoadingCollections,
 		isCreating: executeCreateMutation.isPending,
 		isUpdating: executeUpdateMutation.isPending,
 		isDeleting: executeDeleteMutation.isPending,

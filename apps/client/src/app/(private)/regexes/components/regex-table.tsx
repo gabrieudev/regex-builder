@@ -2,7 +2,7 @@
 
 import { format } from 'date-fns'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowDown, ArrowUp, ArrowUpDown, Copy, Pencil, Trash2 } from 'lucide-react'
+import { ArrowDown, ArrowUp, ArrowUpDown, CircleAlert, Copy, Pencil, Trash2 } from 'lucide-react'
 import { type JSX, useState } from 'react'
 import { FaJava, FaJs, FaPython } from 'react-icons/fa'
 import { Badge } from '@/components/ui/badge'
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { LoadingSkeleton } from '@/components/loading-skeleton'
 
 interface Props {
 	items: Regex[]
@@ -18,6 +19,7 @@ interface Props {
 	onSort: (field: SortField) => void
 	onEdit: (r: Regex) => void
 	onDelete: (r: Regex) => void
+	isLoadingRegexes: boolean
 }
 
 const LANG_BADGE: Record<string, 'python' | 'java' | 'javascript' | 'outline'> = {
@@ -91,14 +93,31 @@ function CopyButton({ text }: { text: string }) {
 	)
 }
 
-export function RegexTable({ items, sortField, sortDir, onSort, onEdit, onDelete }: Props) {
+export function RegexTable({ items, sortField, sortDir, onSort, onEdit, onDelete, isLoadingRegexes }: Props) {
+	if (isLoadingRegexes) {
+		return (
+			<motion.div
+				key="loading"
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				exit={{ opacity: 0 }}
+				className="flex-1 flex items-center justify-center py-24"
+			>
+				<div className="w-full max-w-7xl px-4">
+					<LoadingSkeleton viewMode="list" count={5} />
+					<p className="sr-only">Carregando coleções...</p>
+				</div>
+			</motion.div>
+		)
+	}
+
 	if (items.length === 0) {
 		return (
 			<div className="rounded-xl border border-border bg-background flex items-center justify-center py-20">
 				<div className="text-center">
-					<div className="text-4xl mb-3 opacity-10 text-muted-foreground">⬡</div>
-					<p className="text-xs font-mono text-muted-foreground">nenhuma regex encontrada</p>
-					<p className="text-[10px] font-mono text-muted-foreground/50 mt-1">tente ajustar seus filtros</p>
+					<CircleAlert className="mx-auto mb-4 w-8 h-8 text-muted-foreground" />
+					<p className="text-xs font-mono text-muted-foreground">Nenhuma regex encontrada</p>
+					<p className="text-[10px] font-mono text-muted-foreground/50 mt-1">Tente ajustar seus filtros</p>
 				</div>
 			</div>
 		)

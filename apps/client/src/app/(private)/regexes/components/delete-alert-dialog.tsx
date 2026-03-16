@@ -62,8 +62,12 @@ export function DeleteAlertDialog({ target, onConfirm, onCancel }: Props) {
 				)}
 
 				<AlertDialogFooter>
-					<AlertDialogCancel onClick={onCancel}>cancelar</AlertDialogCancel>
-					<AlertDialogAction onClick={onConfirm}>excluir permanentemente</AlertDialogAction>
+					<AlertDialogCancel className="cursor-pointer" onClick={onCancel}>
+						Cancelar
+					</AlertDialogCancel>
+					<AlertDialogAction className="cursor-pointer" onClick={onConfirm}>
+						Excluir
+					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

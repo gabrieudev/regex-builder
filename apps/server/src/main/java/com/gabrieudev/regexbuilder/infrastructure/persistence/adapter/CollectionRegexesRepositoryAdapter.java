@@ -98,4 +98,9 @@ public class CollectionRegexesRepositoryAdapter implements CollectionRegexesRepo
                 .map(collectionRegexesEntityMapper::toDomain);
     }
 
+    @Override
+    public int deleteByRegexId(UUID regexId) {
+        return collectionRegexesJpaRepository.deleteByRegexId(regexId);
+    }
+
 }

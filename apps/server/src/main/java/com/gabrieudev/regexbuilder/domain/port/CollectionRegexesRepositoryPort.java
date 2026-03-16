@@ -26,4 +26,6 @@ public interface CollectionRegexesRepositoryPort {
             LocalDateTime addedAtFrom,
             LocalDateTime addedAtTo,
             PaginationRequest paginationRequest);
+
+    int deleteByRegexId(UUID regexId);
 }

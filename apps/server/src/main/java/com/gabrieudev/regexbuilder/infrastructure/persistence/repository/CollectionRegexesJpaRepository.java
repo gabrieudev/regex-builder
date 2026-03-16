@@ -10,6 +10,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.gabrieudev.regexbuilder.infrastructure.persistence.entity.CollectionRegexesEntity;
@@ -71,4 +74,8 @@ public interface CollectionRegexesJpaRepository
     }
 
     Optional<CollectionRegexesEntity> findByCollectionIdAndRegexId(UUID collectionId, UUID regexId);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("DELETE FROM CollectionRegexesEntity cr WHERE cr.regex.id = :regexId")
+    int deleteByRegexId(@Param("regexId") UUID regexId);
 }

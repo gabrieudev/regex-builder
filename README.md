@@ -103,7 +103,7 @@ npm run dev
 
 Agora, você poderá interagir com a aplicação das seguintes formas:
 
-- Interface: [http://localhost:3001](http://localhost:3000)
+- Interface: [http://localhost:3000](http://localhost:3000)
 - Servidor (Swagger UI): [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 - Documentação: [http://localhost:4000](http://localhost:4000)
 

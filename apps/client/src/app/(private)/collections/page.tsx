@@ -169,7 +169,7 @@ export default function CollectionsPage() {
 										<AlertCircle className="w-12 h-12" />
 									</motion.div>
 									<p className="text-sm font-mono text-muted-foreground">Nenhuma coleção encontrada</p>
-									<Button onClick={c.openCreate} variant="outline" size="sm" className="gap-2">
+									<Button onClick={c.openCreate} variant="outline" size="sm" className="gap-2 cursor-pointer">
 										<Plus className="w-3 h-3" />
 										Criar sua primeira coleção
 									</Button>

@@ -128,7 +128,7 @@ export function useRegexManager() {
 			await axiosInstance.delete(`/regexes/${id}`)
 		},
 		onSuccess: () => {
-			toast.success('Regex deletada com sucesso!', { duration: 3000 })
+			toast.success('Regex deletada com sucesso!')
 		},
 		onError: (error) => {
 			toast.error(`Falha ao deletar regex: ${error instanceof AxiosError ? error.message : 'Erro desconhecido'}`)

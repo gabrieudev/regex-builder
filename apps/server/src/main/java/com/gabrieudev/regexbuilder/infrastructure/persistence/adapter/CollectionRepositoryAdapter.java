@@ -67,15 +67,8 @@ public class CollectionRepositoryAdapter implements CollectionRepositoryPort {
     @Override
     public Optional<Collection> save(Collection collection) {
         try {
-
-            CollectionEntity entity = collectionJpaRepository
-                    .findById(collection.getId())
-                    .orElseThrow(() -> new RuntimeException("Coleção não encontrada com id: " + collection.getId()));
-
-            collectionEntityMapper.updateEntityFromDomain(collection, entity);
-
+            CollectionEntity entity = collectionEntityMapper.toEntity(collection);
             entity = collectionJpaRepository.save(entity);
-
             return Optional.of(collectionEntityMapper.toDomain(entity));
         } catch (Exception e) {
             e.printStackTrace();

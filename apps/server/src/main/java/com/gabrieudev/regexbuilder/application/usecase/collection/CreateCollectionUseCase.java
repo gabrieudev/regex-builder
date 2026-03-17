@@ -1,5 +1,6 @@
 package com.gabrieudev.regexbuilder.application.usecase.collection;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,6 +38,9 @@ public class CreateCollectionUseCase {
         }
 
         collection.setUser(userOpt.get());
+        collection.setPinned(false);
+        collection.setCreatedAt(LocalDateTime.now());
+        collection.setUpdatedAt(LocalDateTime.now());
 
         Optional<Collection> savedCollection = collectionRepositoryPort.save(collection);
 
